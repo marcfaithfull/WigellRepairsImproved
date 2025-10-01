@@ -8,8 +8,8 @@ public class TechnicianEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long technicianId;
+    private long id;
 
-    private String technicianName;
-    private String areaOfExpertise;
+    private String wigellRepairsTechnicianName;
+    private String wigellRepairsAreaOfExpertise;
 }

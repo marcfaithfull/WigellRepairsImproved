@@ -10,8 +10,8 @@ public class BookingsEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String customer;
-    private String service;
-    private String date;
-    private String totalPrice;
+    private String wigellRepairsCustomer;
+    private String wigellRepairsService;
+    private String wigellRepairsDate;
+    private String wigellRepairsTotalPrice;
 }

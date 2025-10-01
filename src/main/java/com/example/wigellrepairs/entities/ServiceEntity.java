@@ -10,8 +10,8 @@ public class ServiceEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long serviceId;
 
-    private String serviceName;
-    private String serviceType;
-    private String servicePrice;
-    private String serviceTechnician;
+    private String wigellRepairsServiceName;
+    private String wigellRepairsServiceType;
+    private String wigellRepairsServicePrice;
+    private String wigellRepairsServiceTechnician;
 }

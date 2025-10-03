@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.List;
 
 @Service
@@ -30,9 +31,16 @@ public class RepairsServiceImpl implements RepairsService {
         return testEuro;
     }
 
-    // LIST ALL SERVICES
+    // Customer Services
     @Override
     public List<ServiceEntity> listAllServices() {
         return servicesRepository.findAll();
+    }
+
+    // Admin Services
+    @Transactional
+    @Override
+    public void addService(ServiceEntity serviceEntity) {
+        servicesRepository.save(serviceEntity);
     }
 }

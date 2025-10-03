@@ -1,10 +1,14 @@
 package com.example.wigellrepairs.controllers;
 
+import com.example.wigellrepairs.entities.ServiceEntity;
 import com.example.wigellrepairs.services.RepairsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/wigellrepairs")
@@ -36,9 +40,9 @@ public class AdminController {
     }
 
     @PostMapping("/addservice")
-    @ResponseBody
-    public ResponseEntity<String> addService() {
-        return ResponseEntity.ok("Demo");
+    public ResponseEntity<String> addService(@RequestBody ServiceEntity serviceEntity) {
+        repairsService.addService(serviceEntity);
+        return ResponseEntity.status(HttpStatus.CREATED).body("The service has been added");
     }
 
     @PutMapping("/updateservice")
@@ -62,7 +66,7 @@ public class AdminController {
     @GetMapping("/technicians")
     @ResponseBody
     public ResponseEntity<String> technicians() {
-        return ResponseEntity.ok("Demo");
+        return ResponseEntity.ok("technicians");
     }
 
 }

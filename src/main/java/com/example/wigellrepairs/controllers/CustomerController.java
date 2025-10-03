@@ -20,14 +20,6 @@ public class CustomerController {
         this.repairsService =  repairsService;
     }
 
-    // Test
-    @GetMapping("/test")
-    @ResponseBody
-    public ResponseEntity<String> test() {
-        return ResponseEntity.ok("test");
-    }
-
-    // Customer controller
     @GetMapping("/services")
     @ResponseBody
     public ResponseEntity<List<ServiceEntity>> listAllServices() {

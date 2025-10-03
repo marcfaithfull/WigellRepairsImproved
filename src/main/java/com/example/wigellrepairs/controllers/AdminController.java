@@ -8,8 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
-
 @RestController
 @RequestMapping("/api/wigellrepairs")
 @Secured("ROLE_ADMIN")
@@ -41,6 +39,11 @@ public class AdminController {
 
     @PostMapping("/addservice")
     public ResponseEntity<String> addService(@RequestBody ServiceEntity serviceEntity) {
+        /*ServiceEntity savedServiceEntity = new ServiceEntity();
+        savedServiceEntity.setWigellRepairsServiceName(serviceEntity.getWigellRepairsServiceName());
+        savedServiceEntity.setWigellRepairsServiceType(serviceEntity.getWigellRepairsServiceType());
+        savedServiceEntity.setWigellRepairsServicePrice(serviceEntity.getWigellRepairsServicePrice());
+        savedServiceEntity.setWigellRepairsServiceTechnician(serviceEntity.getWigellRepairsServiceTechnician());*/
         repairsService.addService(serviceEntity);
         return ResponseEntity.status(HttpStatus.CREATED).body("The service has been added");
     }

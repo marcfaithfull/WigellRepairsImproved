@@ -54,6 +54,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf-> csrf
+                        .ignoringRequestMatchers("/api/wigellrepairs/**")
+                )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/wigellrepairs/**").authenticated()
                         .anyRequest().authenticated()

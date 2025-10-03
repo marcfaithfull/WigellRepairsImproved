@@ -8,7 +8,7 @@ public class ServiceEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long serviceId;
+    private long wigellRepairsServiceId;
 
     private String wigellRepairsServiceName;
 
@@ -18,12 +18,12 @@ public class ServiceEntity {
 
     private String wigellRepairsServiceTechnician;
 
-    public long getServiceId() {
-        return serviceId;
+    public long getWigellRepairsServiceId() {
+        return wigellRepairsServiceId;
     }
 
-    public void setServiceId(long serviceId) {
-        this.serviceId = serviceId;
+    public void setWigellRepairsServiceId(long wigellRepairsServiceId) {
+        this.wigellRepairsServiceId = wigellRepairsServiceId;
     }
 
     public String getWigellRepairsServiceName() {

@@ -1,8 +1,10 @@
 package com.example.wigellrepairs.controllers;
 
+import com.example.wigellrepairs.entities.BookingsEntity;
 import com.example.wigellrepairs.entities.ServiceEntity;
-import com.example.wigellrepairs.services.RepairsServiceImpl;
+import com.example.wigellrepairs.services.CustomerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
@@ -13,23 +15,25 @@ import java.util.List;
 @RequestMapping("/api/wigellrepairs")
 @Secured("ROLE_USER")
 public class CustomerController {
-    private RepairsServiceImpl repairsService;
+    private CustomerServiceImpl customerService;
 
     @Autowired
-    public CustomerController(RepairsServiceImpl repairsService) {
-        this.repairsService =  repairsService;
+    public CustomerController(CustomerServiceImpl customerService) {
+        this.customerService =  customerService;
     }
 
     @GetMapping("/services")
     @ResponseBody
     public ResponseEntity<List<ServiceEntity>> listAllServices() {
-        return ResponseEntity.ok(repairsService.listAllServices());
+        return ResponseEntity.ok(customerService.listAllServices());
     }
 
     @PostMapping("/bookservice")
     @ResponseBody
-    public ResponseEntity<String> bookAService() {
-        return ResponseEntity.ok("bookAService");
+    public ResponseEntity<String> bookAService(@RequestBody BookingsEntity bookingsEntity) {
+        customerService.bookService(bookingsEntity);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("The service has been booked");
     }
 
     @PutMapping("/cancelbooking")

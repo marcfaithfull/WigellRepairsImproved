@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ServicesRepository extends JpaRepository<ServiceEntity,Integer> {
 // CRUD
+    ServiceEntity findServiceByServiceId(Long id);
 }

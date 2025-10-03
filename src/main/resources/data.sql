@@ -1,3 +1,3 @@
-INSERT INTO wigellrepairs_services (service_name, service_type, service_price, service_technician) VALUES
+INSERT INTO wigellrepairs_services (wigell_repairs_service_name, wigell_repairs_service_type, wigell_repairs_service_price, wigell_repairs_service_technician) VALUES
                                                                                                        ('name1','type1','price1','technician1'),
                                                                                                        ('name2','type2','price2','technician2');

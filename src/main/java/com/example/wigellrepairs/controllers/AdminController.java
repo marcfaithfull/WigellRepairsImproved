@@ -3,11 +3,12 @@ package com.example.wigellrepairs.controllers;
 import com.example.wigellrepairs.services.RepairsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/api/wigellrepairs")
+@Secured("ROLE_ADMIN")
 public class AdminController {
     RepairsServiceImpl repairsService;
 
@@ -16,7 +17,7 @@ public class AdminController {
         this.repairsService = repairsService;
     }
 
-    @GetMapping("/listcanceled")
+    @GetMapping("/listcancelled")
     @ResponseBody
     public ResponseEntity<String> listCancelledBookings() {
         return ResponseEntity.ok("Demo");
@@ -24,13 +25,13 @@ public class AdminController {
 
     @GetMapping("/listupcoming")
     @ResponseBody
-    public ResponseEntity<String> listupcomingBookings() {
+    public ResponseEntity<String> listUpcomingBookings() {
         return ResponseEntity.ok("Demo");
     }
 
     @GetMapping("/listpast")
     @ResponseBody
-    public ResponseEntity<String> listpastBookings() {
+    public ResponseEntity<String> listPastBookings() {
         return ResponseEntity.ok("Demo");
     }
 

@@ -5,6 +5,7 @@ import com.example.wigellrepairs.repositories.BookingsRepository;
 import com.example.wigellrepairs.repositories.ServicesRepository;
 import com.example.wigellrepairs.services.calculators.CurrencyConverter;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class RepairsServiceImpl implements RepairsService {
     private ServicesRepository servicesRepository;
     private CurrencyConverter currencyConverter;
 
+    @Autowired
     public RepairsServiceImpl(BookingsRepository bookingsRepository, ServicesRepository servicesRepository, CurrencyConverter currencyConverter) {
         this.bookingsRepository = bookingsRepository;
         this.servicesRepository = servicesRepository;

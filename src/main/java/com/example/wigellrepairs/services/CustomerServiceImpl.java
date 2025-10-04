@@ -1,6 +1,7 @@
 package com.example.wigellrepairs.services;
 
 import com.example.wigellrepairs.entities.Booking;
+import com.example.wigellrepairs.entities.Service;
 import com.example.wigellrepairs.repositories.BookingsRepository;
 import com.example.wigellrepairs.repositories.ServicesRepository;
 import com.example.wigellrepairs.repositories.TechnicianRepository;
@@ -29,7 +30,9 @@ public class CustomerServiceImpl implements CustomerService {
     private static final Logger CUSTOMER_SERVICE_LOGGER = LogManager.getLogger(CustomerServiceImpl.class);
 
     @Autowired
-    public CustomerServiceImpl(BookingsRepository bookingsRepository, ServicesRepository servicesRepository, TechnicianRepository technicianRepository, CurrencyConverter currencyConverter, OrderCalculator orderCalculator) {
+    public CustomerServiceImpl(BookingsRepository bookingsRepository, ServicesRepository servicesRepository,
+                               TechnicianRepository technicianRepository, CurrencyConverter currencyConverter,
+                               OrderCalculator orderCalculator) {
         this.bookingsRepository = bookingsRepository;
         this.servicesRepository = servicesRepository;
         this.technicianRepository = technicianRepository;
@@ -38,14 +41,17 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<String> services() {
-        return servicesRepository.findAllServiceNames();
+    public List<Service> services() {
+        return servicesRepository.findAll();
     }
 
     @Override
     public void bookService(Booking booking, Principal principal) {
         booking.setWigellRepairsBookingCustomer(principal.getName());
-        orderCalculator.calculateTotalCost(booking, servicesRepository.findServiceByWigellRepairsServiceId(booking.getWigellRepairsBookingService().getWigellRepairsServiceId()));
+        orderCalculator.calculateTotalCost(booking, servicesRepository
+                .findServiceByWigellRepairsServiceId(booking.getWigellRepairsBookingService()
+                        .getWigellRepairsServiceId()));
+        currencyConverter.convertSekToEuro(booking);
         bookingsRepository.save(booking);
         CUSTOMER_SERVICE_LOGGER.info("[]");
     }

@@ -1,6 +1,7 @@
 package com.example.wigellrepairs.controllers;
 
 import com.example.wigellrepairs.entities.Booking;
+import com.example.wigellrepairs.entities.Service;
 import com.example.wigellrepairs.services.CustomerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,7 @@ public class CustomerController {
 
     @GetMapping("/services")
     @ResponseBody
-    public ResponseEntity<List<String>> listAllServices() {
+    public ResponseEntity<List<Service>> listAllServices() {
         return ResponseEntity.ok(customerService.services());
     }
 

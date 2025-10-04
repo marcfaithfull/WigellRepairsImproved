@@ -33,12 +33,17 @@ public class Booking {
     @Column
     private int wigellRepairsBookingTotalPrice;
 
+    @Column
+    private double wigellRepairsBookingTotalPriceEuro;
+
     @Column(nullable = false)
     private Boolean wigellRepairsBookingCancelled;
 
+    // Constructor
     public Booking() {
         this.wigellRepairsBookingCancelled = false;
     }
+
     // Getters and Setters
     public Long getWigellRepairsBookingId() {
         return wigellRepairsBookingId;
@@ -93,6 +98,22 @@ public class Booking {
     }
 
     public void setCancelled(Boolean wigellRepairsBookingCancelled) {
+        this.wigellRepairsBookingCancelled = wigellRepairsBookingCancelled;
+    }
+
+    public double getWigellRepairsBookingTotalPriceEuro() {
+        return wigellRepairsBookingTotalPriceEuro;
+    }
+
+    public void setWigellRepairsBookingTotalPriceEuro(double wigellRepairsBookingTotalPriceEuro) {
+        this.wigellRepairsBookingTotalPriceEuro = wigellRepairsBookingTotalPriceEuro;
+    }
+
+    public Boolean getWigellRepairsBookingCancelled() {
+        return wigellRepairsBookingCancelled;
+    }
+
+    public void setWigellRepairsBookingCancelled(Boolean wigellRepairsBookingCancelled) {
         this.wigellRepairsBookingCancelled = wigellRepairsBookingCancelled;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.wigellrepairs.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -29,7 +30,7 @@ public class Service {
     private Technician wigellRepairsServiceTechnician;
 
     @OneToMany(mappedBy = "wigellRepairsBookingService", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonIgnore
     private List<Booking> bookings;
 
 

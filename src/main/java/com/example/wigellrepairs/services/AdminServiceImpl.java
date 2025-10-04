@@ -7,6 +7,8 @@ import com.example.wigellrepairs.repositories.ServicesRepository;
 import com.example.wigellrepairs.repositories.TechnicianRepository;
 import jakarta.transaction.Transactional;
 
+import java.util.List;
+
 @org.springframework.stereotype.Service
 public class AdminServiceImpl implements AdminService {
     BookingsRepository bookingsRepository;
@@ -30,5 +32,9 @@ public class AdminServiceImpl implements AdminService {
     public void addTechnician(Technician technician) {
         technician.setWigellRepairsTechnicianId(null);
         technicianRepository.save(technician);
+    }
+
+    public List<String> technicians() {
+        return technicianRepository.findAllTechnicianNames();
     }
 }

@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/wigellrepairs")
 @Secured("ROLE_ADMIN")
@@ -64,7 +66,7 @@ public class AdminController {
 
     @GetMapping("/technicians")
     @ResponseBody
-    public ResponseEntity<String> technicians() {
-        return ResponseEntity.ok("technicians");
+    public ResponseEntity<List<String>> technicians() {
+        return ResponseEntity.ok(adminService.technicians());
     }
 }

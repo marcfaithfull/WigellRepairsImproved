@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @org.springframework.stereotype.Service
@@ -56,5 +57,17 @@ public class CustomerServiceImpl implements CustomerService {
 
         bookingToCancel.setCancelled(true);
         bookingsRepository.save(bookingToCancel);
+    }
+
+    @Override
+    public List<Booking> myBookings(Principal principal) {
+        List<Booking> allBookings = bookingsRepository.findAll();
+        List<Booking> myBookings = new ArrayList<>();
+        for (Booking booking : allBookings) {
+            if (booking.getWigellRepairsBookingCustomer().equals(principal.getName())) {
+                myBookings.add(booking);
+            }
+        }
+        return myBookings;
     }
 }

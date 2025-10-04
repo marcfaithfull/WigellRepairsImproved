@@ -13,5 +13,5 @@ public interface CustomerService {
 
     void cancelBooking(Booking booking, Principal principal);
 
-    // mybookings
+    List<Booking> myBookings(Principal principal);
 }

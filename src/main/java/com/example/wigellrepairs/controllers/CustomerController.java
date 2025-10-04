@@ -44,7 +44,8 @@ public class CustomerController {
 
     @GetMapping("/mybookings")
     @ResponseBody
-    public ResponseEntity<String> myBookings() {
-        return ResponseEntity.ok("myBookings");
+    public ResponseEntity<List<Booking>> myBookings(Principal principal) {
+        customerService.myBookings(principal);
+        return ResponseEntity.ok(customerService.myBookings(principal));
     }
 }

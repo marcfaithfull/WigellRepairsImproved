@@ -24,14 +24,11 @@ public class Service {
     private int wigellRepairsServicePrice;
 
     @ManyToOne
-    @JoinColumn(name = "wigell_repairs_technician_id",
-            nullable = false)
+    @JoinColumn(name = "wigell_repairs_technician_id", nullable = false)
     @JsonBackReference
     private Technician wigellRepairsServiceTechnician;
 
-    @OneToMany(mappedBy = "wigellRepairsBookingService",
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
-            orphanRemoval = true)
+    @OneToMany(mappedBy = "wigellRepairsBookingService", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     @JsonManagedReference
     private List<Booking> bookings;
 

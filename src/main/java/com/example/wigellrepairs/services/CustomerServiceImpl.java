@@ -8,6 +8,8 @@ import com.example.wigellrepairs.services.calculators.CurrencyConverter;
 import com.example.wigellrepairs.services.calculators.OrderCalculator;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -24,6 +26,7 @@ public class CustomerServiceImpl implements CustomerService {
     private TechnicianRepository technicianRepository;
     private CurrencyConverter currencyConverter;
     private OrderCalculator orderCalculator;
+    private static final Logger CUSTOMER_SERVICE_LOGGER = LogManager.getLogger(CustomerServiceImpl.class);
 
     @Autowired
     public CustomerServiceImpl(BookingsRepository bookingsRepository, ServicesRepository servicesRepository, TechnicianRepository technicianRepository, CurrencyConverter currencyConverter, OrderCalculator orderCalculator) {
@@ -41,9 +44,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void bookService(Booking booking, Principal principal) {
-        //booking.setWigellRepairsBookingCustomer(principal.getName());
-        orderCalculator.calculateTotalCost(booking);
+        booking.setWigellRepairsBookingCustomer(principal.getName());
+        orderCalculator.calculateTotalCost(booking, servicesRepository.findServiceByWigellRepairsServiceId(booking.getWigellRepairsBookingService().getWigellRepairsServiceId()));
         bookingsRepository.save(booking);
+        CUSTOMER_SERVICE_LOGGER.info("[]");
     }
 
     @Override

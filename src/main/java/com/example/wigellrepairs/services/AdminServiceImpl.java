@@ -8,6 +8,8 @@ import com.example.wigellrepairs.repositories.ServicesRepository;
 import com.example.wigellrepairs.repositories.TechnicianRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,7 @@ public class AdminServiceImpl implements AdminService {
     BookingsRepository bookingsRepository;
     ServicesRepository servicesRepository;
     TechnicianRepository technicianRepository;
+    private static final Logger ADMIN_SERVICE_LOGGER = LogManager.getLogger(AdminServiceImpl.class);
 
     public AdminServiceImpl(BookingsRepository bookingsRepository, ServicesRepository servicesRepository, TechnicianRepository technicianRepository) {
         this.bookingsRepository = bookingsRepository;
@@ -51,6 +54,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void addService(Service service) {
         servicesRepository.save(service);
+        ADMIN_SERVICE_LOGGER.info("[]");
     }
 
     @Override
@@ -59,7 +63,7 @@ public class AdminServiceImpl implements AdminService {
                 .orElseThrow(() -> new EntityNotFoundException("Service not found"));
 
         Technician existingTechnician = technicianRepository.findById(service.getWigellRepairsServiceTechnician().getWigellRepairsTechnicianId())
-                        .orElseThrow(() -> new EntityNotFoundException("Technician not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Technician not found"));
 
         existingService.setWigellRepairsServiceName(service.getWigellRepairsServiceName());
         existingService.setWigellRepairsServiceType(service.getWigellRepairsServiceType());

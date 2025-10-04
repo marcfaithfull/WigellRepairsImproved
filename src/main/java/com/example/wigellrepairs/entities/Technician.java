@@ -19,9 +19,7 @@ public class Technician {
     @Column(nullable = false)
     private String wigellRepairsAreaOfExpertise;
 
-    @OneToMany(mappedBy = "wigellRepairsServiceTechnician",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+    @OneToMany(mappedBy = "wigellRepairsServiceTechnician", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Service> services;
 

@@ -18,8 +18,7 @@ public class Booking {
     private String wigellRepairsBookingCustomer;
 
     @ManyToOne
-    @JoinColumn(name = "wigell_repairs_service_id",
-            nullable = false)
+    @JoinColumn(name = "wigell_repairs_service_id", nullable = false)
     @JsonBackReference
     private Service wigellRepairsBookingService;
 

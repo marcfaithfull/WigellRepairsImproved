@@ -56,8 +56,10 @@ public class SecurityConfig {
         http
                 .csrf(csrf-> csrf
                         .ignoringRequestMatchers("/api/wigellrepairs/**")
-                )
+                        .ignoringRequestMatchers("/h2-console/**"))
+                .headers(headers->headers.frameOptions().disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/api/wigellrepairs/**").authenticated()
                         .anyRequest().authenticated()
                 )

@@ -2,7 +2,6 @@ package com.example.wigellrepairs.controllers;
 
 import com.example.wigellrepairs.entities.ServiceEntity;
 import com.example.wigellrepairs.services.AdminServiceImpl;
-import com.example.wigellrepairs.services.CustomerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,11 +39,6 @@ public class AdminController {
 
     @PostMapping("/addservice")
     public ResponseEntity<String> addService(@RequestBody ServiceEntity serviceEntity) {
-        /*ServiceEntity savedServiceEntity = new ServiceEntity();
-        savedServiceEntity.setWigellRepairsServiceName(serviceEntity.getWigellRepairsServiceName());
-        savedServiceEntity.setWigellRepairsServiceType(serviceEntity.getWigellRepairsServiceType());
-        savedServiceEntity.setWigellRepairsServicePrice(serviceEntity.getWigellRepairsServicePrice());
-        savedServiceEntity.setWigellRepairsServiceTechnician(serviceEntity.getWigellRepairsServiceTechnician());*/
         adminService.addService(serviceEntity);
         return ResponseEntity.status(HttpStatus.CREATED).body("The service has been added");
     }
@@ -57,7 +51,7 @@ public class AdminController {
 
     @DeleteMapping("/remservice/{id}")
     @ResponseBody
-    public ResponseEntity<String> deleteService(@PathVariable String id) {
+    public ResponseEntity<String> remService(@PathVariable String id) {
         return ResponseEntity.ok("Demo");
     }
 
@@ -72,5 +66,4 @@ public class AdminController {
     public ResponseEntity<String> technicians() {
         return ResponseEntity.ok("technicians");
     }
-
 }

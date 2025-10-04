@@ -32,7 +32,6 @@ public class CustomerController {
     @ResponseBody
     public ResponseEntity<String> bookAService(@RequestBody BookingsEntity bookingsEntity) {
         customerService.bookService(bookingsEntity);
-
         return ResponseEntity.status(HttpStatus.CREATED).body("The service has been booked");
     }
 

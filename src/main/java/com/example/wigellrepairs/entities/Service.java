@@ -10,7 +10,7 @@ public class Service {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long wigellRepairsServiceId;
+    private Long wigellRepairsServiceId;
 
     @Column
     private String wigellRepairsServiceName;
@@ -30,11 +30,11 @@ public class Service {
 
 
     // Getters and Setters
-    public long getWigellRepairsServiceId() {
+    public Long getWigellRepairsServiceId() {
         return wigellRepairsServiceId;
     }
 
-    public void setWigellRepairsServiceId(long wigellRepairsServiceId) {
+    public void setWigellRepairsServiceId(Long wigellRepairsServiceId) {
         this.wigellRepairsServiceId = wigellRepairsServiceId;
     }
 

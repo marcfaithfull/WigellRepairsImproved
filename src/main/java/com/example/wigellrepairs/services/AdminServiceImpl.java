@@ -28,6 +28,7 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     @Override
     public void addTechnician(Technician technician) {
+        technician.setWigellRepairsTechnicianId(null);
         technicianRepository.save(technician);
     }
 }

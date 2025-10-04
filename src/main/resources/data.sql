@@ -1,9 +1,8 @@
-INSERT INTO wigellrepairs_technician (wigell_repairs_technician_id,
-                                      wigell_repairs_technician_name,
+INSERT INTO wigellrepairs_technician (wigell_repairs_technician_name,
                                       wigell_repairs_area_of_expertise)
 VALUES
-    (1,'Fred','Car'),
-    (2,'Carl','Electronics');
+    ('Fred','Car'),
+    ('Carl','Electronics');
 
 INSERT INTO wigellrepairs_services (wigell_repairs_service_id,
                                     wigell_repairs_service_name,

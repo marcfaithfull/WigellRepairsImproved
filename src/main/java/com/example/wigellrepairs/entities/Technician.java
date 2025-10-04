@@ -10,7 +10,7 @@ public class Technician {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long wigellRepairsTechnicianId;
+    private Long wigellRepairsTechnicianId;
 
     @Column(nullable = false)
     private String wigellRepairsTechnicianName;
@@ -23,11 +23,11 @@ public class Technician {
 
 
     // Getters and Setters
-    public long getWigellRepairsTechnicianId() {
+    public Long getWigellRepairsTechnicianId() {
         return wigellRepairsTechnicianId;
     }
 
-    public void setWigellRepairsTechnicianId(long wigellRepairsTechnicianId) {
+    public void setWigellRepairsTechnicianId(Long wigellRepairsTechnicianId) {
         this.wigellRepairsTechnicianId = wigellRepairsTechnicianId;
     }
 

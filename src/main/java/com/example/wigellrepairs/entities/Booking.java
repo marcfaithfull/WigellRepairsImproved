@@ -11,7 +11,7 @@ public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long wigellRepairsBookingId;
+    private Long wigellRepairsBookingId;
 
     @Column
     private String wigellRepairsBookingCustomer;
@@ -33,11 +33,11 @@ public class Booking {
 
 
     // Getters and Setters
-    public long getWigellRepairsBookingId() {
+    public Long getWigellRepairsBookingId() {
         return wigellRepairsBookingId;
     }
 
-    public void setWigellRepairsBookingId(long wigellRepairsBookingId) {
+    public void setWigellRepairsBookingId(Long wigellRepairsBookingId) {
         this.wigellRepairsBookingId = wigellRepairsBookingId;
     }
 

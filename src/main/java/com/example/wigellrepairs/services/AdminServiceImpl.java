@@ -1,6 +1,7 @@
 package com.example.wigellrepairs.services;
 
 import com.example.wigellrepairs.entities.Service;
+import com.example.wigellrepairs.entities.Technician;
 import com.example.wigellrepairs.repositories.BookingsRepository;
 import com.example.wigellrepairs.repositories.ServicesRepository;
 import com.example.wigellrepairs.repositories.TechnicianRepository;
@@ -22,5 +23,11 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void addService(Service service) {
         servicesRepository.save(service);
+    }
+
+    @Transactional
+    @Override
+    public void addTechnician(Technician technician) {
+        technicianRepository.save(technician);
     }
 }

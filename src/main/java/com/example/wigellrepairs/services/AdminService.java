@@ -1,6 +1,7 @@
 package com.example.wigellrepairs.services;
 
 import com.example.wigellrepairs.entities.Service;
+import com.example.wigellrepairs.entities.Technician;
 
 public interface AdminService {
 
@@ -16,7 +17,7 @@ public interface AdminService {
 
     // remservice{id}
 
-    // addtechnician
+    void addTechnician(Technician technician);
 
     // technicians
 }

@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @org.springframework.stereotype.Service
@@ -38,8 +39,8 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Service> listAllServices() {
-        return servicesRepository.findAll();
+    public List<String> listAllServices() {
+        return servicesRepository.findAllServiceNames();
     }
 
     @Override

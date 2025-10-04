@@ -1,5 +1,6 @@
 package com.example.wigellrepairs.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -17,7 +18,9 @@ public class Booking {
     private String wigellRepairsBookingCustomer;
 
     @ManyToOne
-    @JoinColumn(name = "wigell_repairs_service_id", nullable = false)
+    @JoinColumn(name = "wigell_repairs_service_id",
+            nullable = false)
+    @JsonBackReference
     private Service wigellRepairsBookingService;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

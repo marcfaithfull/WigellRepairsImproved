@@ -1,5 +1,6 @@
 package com.example.wigellrepairs.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -18,7 +19,10 @@ public class Technician {
     @Column(nullable = false)
     private String wigellRepairsAreaOfExpertise;
 
-    @OneToMany(mappedBy = "wigellRepairsServiceTechnician", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "wigellRepairsServiceTechnician",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    @JsonManagedReference
     private List<Service> services;
 
 

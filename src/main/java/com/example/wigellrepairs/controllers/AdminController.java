@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/api/wigellrepairs")
 @Secured("ROLE_ADMIN")
 public class AdminController {
-    AdminServiceImpl adminService;
+    private final AdminServiceImpl adminService;
 
     @Autowired
     public AdminController(AdminServiceImpl adminService) {

@@ -1,17 +1,16 @@
 package com.example.wigellrepairs.services;
 
 import com.example.wigellrepairs.entities.Booking;
-import com.example.wigellrepairs.entities.Service;
 import com.example.wigellrepairs.repositories.BookingsRepository;
 import com.example.wigellrepairs.repositories.ServicesRepository;
 import com.example.wigellrepairs.repositories.TechnicianRepository;
 import com.example.wigellrepairs.services.calculators.CurrencyConverter;
 import com.example.wigellrepairs.services.calculators.OrderCalculator;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
 @org.springframework.stereotype.Service
@@ -32,12 +31,6 @@ public class CustomerServiceImpl implements CustomerService {
         this.orderCalculator = orderCalculator;
     }
 
-    public int test() {
-        int testSek = 1000;
-        int testEuro = currencyConverter.convertSekToEuro(testSek);
-        return testEuro;
-    }
-
     @Override
     public List<String> listAllServices() {
         return servicesRepository.findAllServiceNames();
@@ -45,8 +38,18 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void bookService(Booking booking, Principal principal) {
-        booking.setWigellRepairsBookingCustomer(principal.getName());
+        //booking.setWigellRepairsBookingCustomer(principal.getName());
         orderCalculator.calculateTotalCost(booking);
         bookingsRepository.save(booking);
+    }
+
+    @Override
+    public void cancelBooking(Booking booking) {
+        Booking bookingToCancel = bookingsRepository.findById(booking.getWigellRepairsBookingId())
+                .orElseThrow(() -> new EntityNotFoundException("Booking not found"));
+
+        bookingToCancel.setWasCancelled(true);
+
+        bookingsRepository.save(bookingToCancel);
     }
 }

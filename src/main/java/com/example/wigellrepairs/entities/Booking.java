@@ -31,6 +31,9 @@ public class Booking {
     @Column
     private int wigellRepairsBookingTotalPrice;
 
+    @Column
+    private Boolean wigellRepairsBookingWasCancelled = false;
+
 
     // Getters and Setters
     public Long getWigellRepairsBookingId() {
@@ -79,5 +82,13 @@ public class Booking {
 
     public void setWigellRepairsBookingService(Service wigellRepairsBookingService) {
         this.wigellRepairsBookingService = wigellRepairsBookingService;
+    }
+
+    public Boolean isWasCancelled() {
+        return wigellRepairsBookingWasCancelled;
+    }
+
+    public void setWasCancelled(Boolean wigellRepairsBookingWasCancelled) {
+        this.wigellRepairsBookingWasCancelled = wigellRepairsBookingWasCancelled;
     }
 }

@@ -1,7 +1,6 @@
 package com.example.wigellrepairs.controllers;
 
 import com.example.wigellrepairs.entities.Booking;
-import com.example.wigellrepairs.entities.Service;
 import com.example.wigellrepairs.services.CustomerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +15,7 @@ import java.util.List;
 @RequestMapping("/api/wigellrepairs")
 @Secured("ROLE_USER")
 public class CustomerController {
-    private CustomerServiceImpl customerService;
+    private final CustomerServiceImpl customerService;
 
     @Autowired
     public CustomerController(CustomerServiceImpl customerService) {
@@ -38,8 +37,9 @@ public class CustomerController {
 
     @PutMapping("/cancelbooking")
     @ResponseBody
-    public ResponseEntity<String> cancelBooking() {
-        return ResponseEntity.ok("cancelBooking");
+    public ResponseEntity<String> cancelBooking(@RequestBody Booking booking) {
+        customerService.cancelBooking(booking);
+        return ResponseEntity.ok("Your booking was cancelled");
     }
 
     @GetMapping("/mybookings")

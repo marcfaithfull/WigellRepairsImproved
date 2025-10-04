@@ -1,5 +1,6 @@
 package com.example.wigellrepairs.controllers;
 
+import com.example.wigellrepairs.entities.Booking;
 import com.example.wigellrepairs.entities.Service;
 import com.example.wigellrepairs.entities.Technician;
 import com.example.wigellrepairs.services.AdminServiceImpl;
@@ -24,8 +25,9 @@ public class AdminController {
 
     @GetMapping("/listcancelled")
     @ResponseBody
-    public ResponseEntity<String> listCancelledBookings() {
-        return ResponseEntity.ok("Demo");
+    public ResponseEntity<List<Booking>> listCancelledBookings() {
+        adminService.listCancelled();
+        return ResponseEntity.ok(adminService.listCancelled());
     }
 
     @GetMapping("/listupcoming")
@@ -55,7 +57,7 @@ public class AdminController {
     @DeleteMapping("/remservice/{id}")
     @ResponseBody
     public ResponseEntity<String> remService(@PathVariable Long id) {
-        adminService.remservice(id);
+        adminService.remService(id);
         return ResponseEntity.ok("This service has been deleted");
     }
 

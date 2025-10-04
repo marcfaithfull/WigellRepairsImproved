@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CustomerService {
 
-    List<String> listAllServices();
+    List<String> services();
 
     void bookService(Booking booking, Principal principal);
 

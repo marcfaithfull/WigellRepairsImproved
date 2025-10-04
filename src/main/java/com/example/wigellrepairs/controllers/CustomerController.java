@@ -25,7 +25,7 @@ public class CustomerController {
     @GetMapping("/services")
     @ResponseBody
     public ResponseEntity<List<String>> listAllServices() {
-        return ResponseEntity.ok(customerService.listAllServices());
+        return ResponseEntity.ok(customerService.services());
     }
 
     @PostMapping("/bookservice")

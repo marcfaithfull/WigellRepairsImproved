@@ -1,5 +1,6 @@
 package com.example.wigellrepairs.services;
 
+import com.example.wigellrepairs.entities.Booking;
 import com.example.wigellrepairs.entities.Service;
 import com.example.wigellrepairs.entities.Technician;
 import com.example.wigellrepairs.repositories.BookingsRepository;
@@ -8,6 +9,7 @@ import com.example.wigellrepairs.repositories.TechnicianRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @org.springframework.stereotype.Service
@@ -21,6 +23,28 @@ public class AdminServiceImpl implements AdminService {
         this.bookingsRepository = bookingsRepository;
         this.servicesRepository = servicesRepository;
         this.technicianRepository = technicianRepository;
+    }
+
+    @Override
+    public List<Booking> listCancelled() {
+        List<Booking> allBookings = bookingsRepository.findAll();
+        List<Booking> cancelledBookings = new ArrayList<>();
+        for (Booking booking : allBookings) {
+            if (booking.isCancelled()) {
+                cancelledBookings.add(booking);
+            }
+        }
+        return cancelledBookings;
+    }
+
+    @Override
+    public List<Booking> listUpcoming() {
+        return List.of();
+    }
+
+    @Override
+    public List<Booking> listPast() {
+        return List.of();
     }
 
     @Transactional
@@ -48,7 +72,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional
     @Override
-    public void remservice(Long id) {
+    public void remService(Long id) {
         servicesRepository.deleteServiceByWigellRepairsServiceId(id);
     }
 

@@ -1,5 +1,6 @@
 package com.example.wigellrepairs.services;
 
+import com.example.wigellrepairs.entities.Booking;
 import com.example.wigellrepairs.entities.Service;
 import com.example.wigellrepairs.entities.Technician;
 
@@ -7,17 +8,17 @@ import java.util.List;
 
 public interface AdminService {
 
-    // listcancelled
+    List<Booking> listCancelled();
 
-    // listupcoming
+    List<Booking> listUpcoming();
 
-    // listpast
+    List<Booking> listPast();
 
     void addService(Service service);
 
     void updateService(Service service);
 
-    void remservice(Long id);
+    void remService(Long id);
 
     void addTechnician(Technician technician);
 

@@ -31,10 +31,12 @@ public class Booking {
     @Column
     private int wigellRepairsBookingTotalPrice;
 
-    @Column
-    private Boolean wigellRepairsBookingCancelled = false;
+    @Column(nullable = false)
+    private Boolean wigellRepairsBookingCancelled;
 
-
+    public Booking() {
+        this.wigellRepairsBookingCancelled = false;
+    }
     // Getters and Setters
     public Long getWigellRepairsBookingId() {
         return wigellRepairsBookingId;

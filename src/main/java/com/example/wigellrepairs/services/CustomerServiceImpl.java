@@ -35,7 +35,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<String> listAllServices() {
+    public List<String> services() {
         return servicesRepository.findAllServiceNames();
     }
 

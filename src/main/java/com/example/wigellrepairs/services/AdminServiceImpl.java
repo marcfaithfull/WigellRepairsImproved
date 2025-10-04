@@ -5,11 +5,15 @@ import com.example.wigellrepairs.entities.Technician;
 import com.example.wigellrepairs.repositories.BookingsRepository;
 import com.example.wigellrepairs.repositories.ServicesRepository;
 import com.example.wigellrepairs.repositories.TechnicianRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @org.springframework.stereotype.Service
+@Transactional
 public class AdminServiceImpl implements AdminService {
     BookingsRepository bookingsRepository;
     ServicesRepository servicesRepository;
@@ -25,6 +29,23 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void addService(Service service) {
         servicesRepository.save(service);
+    }
+
+    @Override
+    public void updateService(Service service) {
+        Service existingService = servicesRepository.findById(service.getWigellRepairsServiceId())
+                .orElseThrow(() -> new EntityNotFoundException("Service not found"));
+
+        Technician existingTechnician = technicianRepository.findById(service.getWigellRepairsServiceTechnician().getWigellRepairsTechnicianId())
+                        .orElseThrow(() -> new EntityNotFoundException("Technician not found"));
+
+        existingService.setWigellRepairsServiceName(service.getWigellRepairsServiceName());
+        existingService.setWigellRepairsServiceType(service.getWigellRepairsServiceType());
+        existingService.setWigellRepairsServicePrice(service.getWigellRepairsServicePrice());
+        existingService.setWigellRepairsServiceTechnician(existingTechnician);
+
+        servicesRepository.save(existingService);
+
     }
 
     @Transactional

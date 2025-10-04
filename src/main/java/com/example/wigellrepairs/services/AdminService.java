@@ -16,6 +16,7 @@ public interface AdminService {
     void addService(Service service);
 
     // updateservice
+    void updateService(Service service);
 
     void remservice(Long id);
 

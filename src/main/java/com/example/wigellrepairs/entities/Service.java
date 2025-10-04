@@ -25,7 +25,7 @@ public class Service {
     @JoinColumn(name = "wigell_repairs_technician_id", nullable = false)
     private Technician wigellRepairsServiceTechnician;
 
-    @OneToMany(mappedBy = "wigellRepairsBookingService", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "wigellRepairsBookingService", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<Booking> bookings;
 
 

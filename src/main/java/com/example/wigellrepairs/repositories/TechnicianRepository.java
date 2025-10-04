@@ -12,4 +12,6 @@ public interface TechnicianRepository extends JpaRepository<Technician, Long> {
 
     @Query("SELECT s.wigellRepairsTechnicianName FROM Technician s")
     List<String> findAllTechnicianNames();
+
+    Technician findTechniciansByWigellRepairsTechnicianId(Long id);
 }

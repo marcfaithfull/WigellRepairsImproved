@@ -9,6 +9,8 @@ import com.example.wigellrepairs.services.calculators.OrderCalculator;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.util.List;
@@ -44,12 +46,15 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void cancelBooking(Booking booking) {
+    public void cancelBooking(Booking booking, Principal principal) {
         Booking bookingToCancel = bookingsRepository.findById(booking.getWigellRepairsBookingId())
                 .orElseThrow(() -> new EntityNotFoundException("Booking not found"));
 
-        bookingToCancel.setWasCancelled(true);
+        if (!bookingToCancel.getWigellRepairsBookingCustomer().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not authorised to cancel this booking");
+        }
 
+        bookingToCancel.setCancelled(true);
         bookingsRepository.save(bookingToCancel);
     }
 }

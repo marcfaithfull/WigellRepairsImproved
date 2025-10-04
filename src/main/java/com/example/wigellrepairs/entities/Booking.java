@@ -32,7 +32,7 @@ public class Booking {
     private int wigellRepairsBookingTotalPrice;
 
     @Column
-    private Boolean wigellRepairsBookingWasCancelled = false;
+    private Boolean wigellRepairsBookingCancelled = false;
 
 
     // Getters and Setters
@@ -84,11 +84,11 @@ public class Booking {
         this.wigellRepairsBookingService = wigellRepairsBookingService;
     }
 
-    public Boolean isWasCancelled() {
-        return wigellRepairsBookingWasCancelled;
+    public Boolean isCancelled() {
+        return wigellRepairsBookingCancelled;
     }
 
-    public void setWasCancelled(Boolean wigellRepairsBookingWasCancelled) {
-        this.wigellRepairsBookingWasCancelled = wigellRepairsBookingWasCancelled;
+    public void setCancelled(Boolean wigellRepairsBookingCancelled) {
+        this.wigellRepairsBookingCancelled = wigellRepairsBookingCancelled;
     }
 }

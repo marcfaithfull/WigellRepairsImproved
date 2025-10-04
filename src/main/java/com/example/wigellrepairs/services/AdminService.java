@@ -17,10 +17,9 @@ public interface AdminService {
 
     // updateservice
 
-    // remservice{id}
+    void remservice(Long id);
 
     void addTechnician(Technician technician);
 
-    // technicians
     List<String> technicians();
 }

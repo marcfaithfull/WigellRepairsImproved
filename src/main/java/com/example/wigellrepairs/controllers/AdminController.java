@@ -54,8 +54,9 @@ public class AdminController {
 
     @DeleteMapping("/remservice/{id}")
     @ResponseBody
-    public ResponseEntity<String> remService(@PathVariable String id) {
-        return ResponseEntity.ok("Demo");
+    public ResponseEntity<String> remService(@PathVariable Long id) {
+        adminService.remservice(id);
+        return ResponseEntity.ok("This service has been deleted");
     }
 
     @PostMapping("/addtechnician")

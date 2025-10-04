@@ -2,22 +2,34 @@ package com.example.wigellrepairs.entities;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "wigellrepairs_services")
-public class ServiceEntity {
+public class Service {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long wigellRepairsServiceId;
 
+    @Column
     private String wigellRepairsServiceName;
 
+    @Column
     private String wigellRepairsServiceType;
 
-    private String wigellRepairsServicePrice;
+    @Column
+    private int wigellRepairsServicePrice;
 
-    private String wigellRepairsServiceTechnician;
+    @ManyToOne
+    @JoinColumn(name = "wigell_repairs_technician_id", nullable = false)
+    private Technician wigellRepairsServiceTechnician;
 
+    @OneToMany(mappedBy = "wigellRepairsBookingService", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Booking> bookings;
+
+
+    // Getters and Setters
     public long getWigellRepairsServiceId() {
         return wigellRepairsServiceId;
     }
@@ -42,19 +54,27 @@ public class ServiceEntity {
         this.wigellRepairsServiceType = wigellRepairsServiceType;
     }
 
-    public String getWigellRepairsServicePrice() {
+    public List<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
+    }
+
+    public int getWigellRepairsServicePrice() {
         return wigellRepairsServicePrice;
     }
 
-    public void setWigellRepairsServicePrice(String wigellRepairsServicePrice) {
+    public void setWigellRepairsServicePrice(int wigellRepairsServicePrice) {
         this.wigellRepairsServicePrice = wigellRepairsServicePrice;
     }
 
-    public String getWigellRepairsServiceTechnician() {
+    public Technician getWigellRepairsServiceTechnician() {
         return wigellRepairsServiceTechnician;
     }
 
-    public void setWigellRepairsServiceTechnician(String wigellRepairsServiceTechnician) {
+    public void setWigellRepairsServiceTechnician(Technician wigellRepairsServiceTechnician) {
         this.wigellRepairsServiceTechnician = wigellRepairsServiceTechnician;
     }
 }

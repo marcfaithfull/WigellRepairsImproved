@@ -1,6 +1,6 @@
 package com.example.wigellrepairs.services;
 
-import com.example.wigellrepairs.entities.ServiceEntity;
+import com.example.wigellrepairs.entities.Service;
 
 public interface AdminService {
 
@@ -10,7 +10,7 @@ public interface AdminService {
 
     // listpast
 
-    void addService(ServiceEntity serviceEntity);
+    void addService(Service service);
 
     // updateservice
 

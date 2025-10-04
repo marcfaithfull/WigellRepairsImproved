@@ -1,15 +1,16 @@
 package com.example.wigellrepairs.services;
 
-import com.example.wigellrepairs.entities.BookingsEntity;
-import com.example.wigellrepairs.entities.ServiceEntity;
+import com.example.wigellrepairs.entities.Booking;
+import com.example.wigellrepairs.entities.Service;
 
+import java.security.Principal;
 import java.util.List;
 
 public interface CustomerService {
 
-    List<ServiceEntity> listAllServices();
+    List<Service> listAllServices();
 
-    void bookService(BookingsEntity bookingsEntity);
+    void bookService(Booking booking, Principal principal);
 
     // cancelbooking
 

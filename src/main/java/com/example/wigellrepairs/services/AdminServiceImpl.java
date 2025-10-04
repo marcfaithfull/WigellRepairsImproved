@@ -1,13 +1,12 @@
 package com.example.wigellrepairs.services;
 
-import com.example.wigellrepairs.entities.ServiceEntity;
+import com.example.wigellrepairs.entities.Service;
 import com.example.wigellrepairs.repositories.BookingsRepository;
 import com.example.wigellrepairs.repositories.ServicesRepository;
 import com.example.wigellrepairs.repositories.TechnicianRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
 
-@Service
+@org.springframework.stereotype.Service
 public class AdminServiceImpl implements AdminService {
     BookingsRepository bookingsRepository;
     ServicesRepository servicesRepository;
@@ -21,7 +20,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional
     @Override
-    public void addService(ServiceEntity serviceEntity) {
-        servicesRepository.save(serviceEntity);
+    public void addService(Service service) {
+        servicesRepository.save(service);
     }
 }

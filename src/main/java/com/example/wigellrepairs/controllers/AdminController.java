@@ -1,6 +1,6 @@
 package com.example.wigellrepairs.controllers;
 
-import com.example.wigellrepairs.entities.ServiceEntity;
+import com.example.wigellrepairs.entities.Service;
 import com.example.wigellrepairs.services.AdminServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,8 +38,8 @@ public class AdminController {
     }
 
     @PostMapping("/addservice")
-    public ResponseEntity<String> addService(@RequestBody ServiceEntity serviceEntity) {
-        adminService.addService(serviceEntity);
+    public ResponseEntity<String> addService(@RequestBody Service service) {
+        adminService.addService(service);
         return ResponseEntity.status(HttpStatus.CREATED).body("The service has been added");
     }
 

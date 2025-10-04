@@ -1,31 +1,34 @@
 package com.example.wigellrepairs.services;
 
-import com.example.wigellrepairs.entities.BookingsEntity;
-import com.example.wigellrepairs.entities.ServiceEntity;
+import com.example.wigellrepairs.entities.Booking;
+import com.example.wigellrepairs.entities.Service;
 import com.example.wigellrepairs.repositories.BookingsRepository;
 import com.example.wigellrepairs.repositories.ServicesRepository;
 import com.example.wigellrepairs.repositories.TechnicianRepository;
 import com.example.wigellrepairs.services.calculators.CurrencyConverter;
+import com.example.wigellrepairs.services.calculators.OrderCalculator;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.List;
 
-@Service
+@org.springframework.stereotype.Service
 @Transactional
 public class CustomerServiceImpl implements CustomerService {
     private BookingsRepository bookingsRepository;
     private ServicesRepository servicesRepository;
     private TechnicianRepository technicianRepository;
     private CurrencyConverter currencyConverter;
+    private OrderCalculator orderCalculator;
 
     @Autowired
-    public CustomerServiceImpl(BookingsRepository bookingsRepository, ServicesRepository servicesRepository, TechnicianRepository technicianRepository, CurrencyConverter currencyConverter) {
+    public CustomerServiceImpl(BookingsRepository bookingsRepository, ServicesRepository servicesRepository, TechnicianRepository technicianRepository, CurrencyConverter currencyConverter, OrderCalculator orderCalculator) {
         this.bookingsRepository = bookingsRepository;
         this.servicesRepository = servicesRepository;
         this.technicianRepository = technicianRepository;
         this.currencyConverter = currencyConverter;
+        this.orderCalculator = orderCalculator;
     }
 
     public int test() {
@@ -35,12 +38,14 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<ServiceEntity> listAllServices() {
+    public List<Service> listAllServices() {
         return servicesRepository.findAll();
     }
 
     @Override
-    public void bookService(BookingsEntity bookingsEntity) {
-
+    public void bookService(Booking booking, Principal principal) {
+        booking.setWigellRepairsBookingCustomer(principal.getName());
+        orderCalculator.calculateTotalCost(booking);
+        bookingsRepository.save(booking);
     }
 }

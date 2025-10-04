@@ -1,7 +1,7 @@
 package com.example.wigellrepairs.controllers;
 
-import com.example.wigellrepairs.entities.BookingsEntity;
-import com.example.wigellrepairs.entities.ServiceEntity;
+import com.example.wigellrepairs.entities.Booking;
+import com.example.wigellrepairs.entities.Service;
 import com.example.wigellrepairs.services.CustomerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -24,14 +25,14 @@ public class CustomerController {
 
     @GetMapping("/services")
     @ResponseBody
-    public ResponseEntity<List<ServiceEntity>> listAllServices() {
+    public ResponseEntity<List<Service>> listAllServices() {
         return ResponseEntity.ok(customerService.listAllServices());
     }
 
     @PostMapping("/bookservice")
     @ResponseBody
-    public ResponseEntity<String> bookAService(@RequestBody BookingsEntity bookingsEntity) {
-        customerService.bookService(bookingsEntity);
+    public ResponseEntity<String> bookAService(@RequestBody Booking booking, Principal principal) {
+        customerService.bookService(booking, principal);
         return ResponseEntity.status(HttpStatus.CREATED).body("The service has been booked");
     }
 

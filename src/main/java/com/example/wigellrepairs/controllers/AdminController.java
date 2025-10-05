@@ -26,20 +26,19 @@ public class AdminController {
     @GetMapping("/listcancelled")
     @ResponseBody
     public ResponseEntity<List<Booking>> listCancelledBookings() {
-        //adminService.listCancelled();
         return ResponseEntity.ok(adminService.listCancelled());
     }
 
     @GetMapping("/listupcoming")
     @ResponseBody
-    public ResponseEntity<String> listUpcomingBookings() {
-        return ResponseEntity.ok("Demo");
+    public ResponseEntity<List<Booking>> listUpcomingBookings() {
+        return ResponseEntity.ok(adminService.listUpcoming());
     }
 
     @GetMapping("/listpast")
     @ResponseBody
-    public ResponseEntity<String> listPastBookings() {
-        return ResponseEntity.ok("Demo");
+    public ResponseEntity<List<Booking>> listPastBookings() {
+        return ResponseEntity.ok(adminService.listPast());
     }
 
     @PostMapping("/addservice")

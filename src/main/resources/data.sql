@@ -10,8 +10,8 @@ INSERT INTO wigellrepairs_services (wigell_repairs_service_id,
                                     wigell_repairs_service_price,
                                     wigell_repairs_technician_id)
 VALUES
-    (1,'Oil change','Car',300,1),
-    (2,'Winter tyre change','Car',500,1);
+    (1,'Oil change','Car',1000,1),
+    (2,'Winter tyre change','Car',300,1);
 
 INSERT INTO wigellrepairs_bookings (wigell_repairs_booking_customer,
                                     wigell_repairs_service_id,
@@ -20,6 +20,6 @@ INSERT INTO wigellrepairs_bookings (wigell_repairs_booking_customer,
                                     wigell_repairs_booking_total_price_euro,
                                     wigell_repairs_booking_cancelled)
 VALUES
-    ('Kurt',1,'2025-11-01',300,24, false),
-    ('Dave',2,'2024-11-15',500, 40, false),
-    ('Kurt',1,'2025-10-04',300,24,false);
+    ('Kurt',1,'2025-11-01',1000,24, false),
+    ('Dave',2,'2024-11-15',300, 40, false),
+    ('Kurt',1,'2025-10-04',1000,24,false);

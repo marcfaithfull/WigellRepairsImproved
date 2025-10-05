@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,19 +45,33 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<Booking> listUpcoming() {
-        return List.of();
+        List<Booking> allBookings = bookingsRepository.findAll();
+        List<Booking> upcomingBookings = new ArrayList<>();
+        for (Booking booking : allBookings) {
+            if (booking.getWigellRepairsBookingDate().isAfter(LocalDate.now())) {
+                upcomingBookings.add(booking);
+            }
+        }
+        return upcomingBookings;
     }
 
     @Override
     public List<Booking> listPast() {
-        return List.of();
+        List<Booking> allBookings = bookingsRepository.findAll();
+        List<Booking> pastBookings = new ArrayList<>();
+        for (Booking booking : allBookings) {
+            if (booking.getWigellRepairsBookingDate().isBefore(LocalDate.now())) {
+                pastBookings.add(booking);
+            }
+        }
+        return pastBookings;
     }
 
     @Transactional
     @Override
     public void addService(Service service) {
         servicesRepository.save(service);
-        ADMIN_SERVICE_LOGGER.info("[]");
+        ADMIN_SERVICE_LOGGER.info("Service: {} has been added to the database", service.getWigellRepairsServiceName());
     }
 
     @Override

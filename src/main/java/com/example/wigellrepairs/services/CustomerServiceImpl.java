@@ -53,7 +53,9 @@ public class CustomerServiceImpl implements CustomerService {
                         .getWigellRepairsServiceId()));
         currencyConverter.convertSekToEuro(booking);
         bookingsRepository.save(booking);
-        CUSTOMER_SERVICE_LOGGER.info("[]");
+        // Logging
+        CUSTOMER_SERVICE_LOGGER.info("{} booked service with id:{}",
+                booking.getWigellRepairsBookingCustomer(), booking.getWigellRepairsBookingService().getWigellRepairsServiceId());
     }
 
     @Override

@@ -87,7 +87,7 @@ public class AdminServiceImpl implements AdminService {
         technicianRepository.save(technician);
     }
 
-    public List<String> technicians() {
-        return technicianRepository.findAllTechnicianNames();
+    public List<Technician> technicians() {
+        return technicianRepository.findAll();
     }
 }

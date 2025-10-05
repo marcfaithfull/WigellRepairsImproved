@@ -69,7 +69,7 @@ public class AdminController {
 
     @GetMapping("/technicians")
     @ResponseBody
-    public ResponseEntity<List<String>> technicians() {
+    public ResponseEntity<List<Technician>> technicians() {
         return ResponseEntity.ok(adminService.technicians());
     }
 }

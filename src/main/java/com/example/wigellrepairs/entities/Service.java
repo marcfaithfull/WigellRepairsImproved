@@ -2,7 +2,6 @@ package com.example.wigellrepairs.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -51,14 +50,6 @@ public class Service {
         this.wigellRepairsServiceName = wigellRepairsServiceName;
     }
 
-    public String getWigellRepairsServiceType() {
-        return wigellRepairsServiceType;
-    }
-
-    public void setWigellRepairsServiceType(String wigellRepairsServiceType) {
-        this.wigellRepairsServiceType = wigellRepairsServiceType;
-    }
-
     public List<Booking> getBookings() {
         return bookings;
     }
@@ -81,5 +72,13 @@ public class Service {
 
     public void setWigellRepairsServiceTechnician(Technician wigellRepairsServiceTechnician) {
         this.wigellRepairsServiceTechnician = wigellRepairsServiceTechnician;
+    }
+
+    public String getWigellRepairsServiceType() {
+        return wigellRepairsServiceType;
+    }
+
+    public void setWigellRepairsServiceType(String wigellRepairsServiceType) {
+        this.wigellRepairsServiceType = wigellRepairsServiceType;
     }
 }

@@ -22,5 +22,5 @@ public interface AdminService {
 
     void addTechnician(Technician technician);
 
-    List<String> technicians();
+    List<Technician> technicians();
 }

@@ -2,6 +2,7 @@ package com.example.wigellrepairs.services;
 
 import com.example.wigellrepairs.entities.Booking;
 import com.example.wigellrepairs.entities.Service;
+import org.springframework.http.ResponseEntity;
 
 import java.security.Principal;
 import java.util.List;
@@ -12,7 +13,7 @@ public interface CustomerService {
 
     void bookService(Booking booking, Principal principal);
 
-    void cancelBooking(Booking booking, Principal principal);
+    ResponseEntity<String> cancelBooking(Booking booking, Principal principal);
 
     List<Booking> myBookings(Principal principal);
 }

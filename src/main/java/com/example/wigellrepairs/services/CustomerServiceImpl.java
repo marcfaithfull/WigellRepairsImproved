@@ -13,9 +13,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -61,16 +63,26 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void cancelBooking(Booking booking, Principal principal) {
+    public ResponseEntity<String> cancelBooking(Booking booking, Principal principal) {
+        Optional<Booking> optionalBooking = bookingsRepository.findById(booking.getWigellRepairsBookingId());
+        if (!optionalBooking.isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There is no booking with this id");
+        }
+
         Booking bookingToCancel = bookingsRepository.findById(booking.getWigellRepairsBookingId())
-                .orElseThrow(() -> new EntityNotFoundException("Booking not found"));
+                .orElseThrow(EntityNotFoundException::new);
 
         if (!bookingToCancel.getWigellRepairsBookingCustomer().equals(principal.getName())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not authorised to cancel this booking");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not authorised to cancel this booking");
+        }
+
+        if (bookingToCancel.getWigellRepairsBookingDate().minusDays(1).isBefore(LocalDate.now())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("It is too late to cancel this service");
         }
 
         bookingToCancel.setWigellRepairsBookingCancelled(true);
         bookingsRepository.save(bookingToCancel);
+        return ResponseEntity.status(HttpStatus.OK).body("Your booking was cancelled");
     }
 
     @Override

@@ -26,10 +26,6 @@ public class Booking {
     @Column(nullable = false)
     private LocalDate wigellRepairsBookingDate;
 
-    /*@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    @Column
-    private LocalDate wigellRepairsBookingEndDate;*/
-
     @Column
     private int wigellRepairsBookingTotalPrice;
 

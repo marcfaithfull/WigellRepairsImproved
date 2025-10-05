@@ -39,8 +39,7 @@ public class CustomerController {
     @PutMapping("/cancelbooking")
     @ResponseBody
     public ResponseEntity<String> cancelBooking(@RequestBody Booking booking, Principal principal) {
-        customerService.cancelBooking(booking, principal) ;
-        return ResponseEntity.ok("Your booking was cancelled");
+        return customerService.cancelBooking(booking, principal);
     }
 
     @GetMapping("/mybookings")

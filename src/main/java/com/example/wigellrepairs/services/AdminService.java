@@ -3,6 +3,7 @@ package com.example.wigellrepairs.services;
 import com.example.wigellrepairs.entities.Booking;
 import com.example.wigellrepairs.entities.Service;
 import com.example.wigellrepairs.entities.Technician;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface AdminService {
 
     void remService(Long id);
 
-    void addTechnician(Technician technician);
+    ResponseEntity<String> addTechnician(Technician technician);
 
     List<Technician> technicians();
 }

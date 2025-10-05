@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @org.springframework.stereotype.Service
 @Transactional
@@ -48,9 +49,10 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void bookService(Booking booking, Principal principal) {
         booking.setWigellRepairsBookingCustomer(principal.getName());
-        orderCalculator.calculateTotalCost(booking, servicesRepository
-                .findServiceByWigellRepairsServiceId(booking.getWigellRepairsBookingService()
-                        .getWigellRepairsServiceId()));
+        Long serviceId = booking.getWigellRepairsBookingService().getWigellRepairsServiceId();
+        Service serviceToBook = servicesRepository.findServiceByWigellRepairsServiceId(serviceId);
+        booking.setWigellRepairsBookingTotalPrice(serviceToBook.getWigellRepairsServicePrice());
+        //orderCalculator.calculateTotalCost(booking, servicesRepository.findServiceByWigellRepairsServiceId(booking.getWigellRepairsBookingService().getWigellRepairsServiceId()));
         currencyConverter.convertSekToEuro(booking);
         bookingsRepository.save(booking);
         // Logging
@@ -67,7 +69,7 @@ public class CustomerServiceImpl implements CustomerService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not authorised to cancel this booking");
         }
 
-        bookingToCancel.setCancelled(true);
+        bookingToCancel.setWigellRepairsBookingCancelled(true);
         bookingsRepository.save(bookingToCancel);
     }
 
@@ -76,7 +78,7 @@ public class CustomerServiceImpl implements CustomerService {
         List<Booking> allBookings = bookingsRepository.findAll();
         List<Booking> myBookings = new ArrayList<>();
         for (Booking booking : allBookings) {
-            if (booking.getWigellRepairsBookingCustomer().equals(principal.getName())) {
+            if (booking.getWigellRepairsBookingCustomer().equals(principal.getName()) && (booking.getWigellRepairsBookingCancelled().equals(false))) {
                 myBookings.add(booking);
             }
         }

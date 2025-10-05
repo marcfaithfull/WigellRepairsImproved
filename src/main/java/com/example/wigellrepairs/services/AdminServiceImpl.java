@@ -10,6 +10,8 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +35,7 @@ public class AdminServiceImpl implements AdminService {
         List<Booking> allBookings = bookingsRepository.findAll();
         List<Booking> cancelledBookings = new ArrayList<>();
         for (Booking booking : allBookings) {
-            if (booking.isCancelled()) {
+            if (booking.getWigellRepairsBookingCancelled()) {
                 cancelledBookings.add(booking);
             }
         }
@@ -82,9 +84,15 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional
     @Override
-    public void addTechnician(Technician technician) {
+    public ResponseEntity<String> addTechnician(Technician technician) {
         technician.setWigellRepairsTechnicianId(null);
+        String expertise = technician.getWigellRepairsAreaOfExpertise();
+        if (!expertise.equals("Car") && !expertise.equals("White goods") && !expertise.equals("Electronics")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Area of expertise must be Car, White goods or Electronics (Case sensitive)");
+        }
         technicianRepository.save(technician);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("Technician added successfully");
     }
 
     public List<Technician> technicians() {

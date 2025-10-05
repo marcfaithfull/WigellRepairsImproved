@@ -10,7 +10,7 @@ import java.time.temporal.ChronoUnit;
 public class OrderCalculator {
 
     public void calculateTotalCost(Booking booking, Service service) {
-        long datsRented = ChronoUnit.DAYS.between(booking.getWigellRepairsBookingStartDate(), booking.getWigellRepairsBookingEndDate()) + 1;
-        booking.setWigellRepairsBookingTotalPrice((int) (datsRented * service.getWigellRepairsServicePrice()));
+        // long datsRented = ChronoUnit.DAYS.between(booking.getWigellRepairsBookingStartDate(), booking.getWigellRepairsBookingEndDate()) + 1;
+        // booking.setWigellRepairsBookingTotalPrice((int) (datsRented * service.getWigellRepairsServicePrice()));
     }
 }

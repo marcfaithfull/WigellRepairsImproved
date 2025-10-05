@@ -24,11 +24,11 @@ public class Booking {
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(nullable = false)
-    private LocalDate wigellRepairsBookingStartDate;
+    private LocalDate wigellRepairsBookingDate;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    @Column(nullable = false)
-    private LocalDate wigellRepairsBookingEndDate;
+    /*@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @Column
+    private LocalDate wigellRepairsBookingEndDate;*/
 
     @Column
     private int wigellRepairsBookingTotalPrice;
@@ -61,12 +61,12 @@ public class Booking {
         this.wigellRepairsBookingCustomer = wigellRepairsBookingCustomer;
     }
 
-    public LocalDate getWigellRepairsBookingStartDate() {
-        return wigellRepairsBookingStartDate;
+    public LocalDate getWigellRepairsBookingDate() {
+        return wigellRepairsBookingDate;
     }
 
-    public void setWigellRepairsBookingStartDate(LocalDate wigellRepairsBookingStartDate) {
-        this.wigellRepairsBookingStartDate = wigellRepairsBookingStartDate;
+    public void setWigellRepairsBookingDate(LocalDate wigellRepairsBookingDate) {
+        this.wigellRepairsBookingDate = wigellRepairsBookingDate;
     }
 
     public int getWigellRepairsBookingTotalPrice() {
@@ -77,13 +77,13 @@ public class Booking {
         this.wigellRepairsBookingTotalPrice = wigellRepairsBookingTotalPrice;
     }
 
-    public LocalDate getWigellRepairsBookingEndDate() {
+    /*public LocalDate getWigellRepairsBookingEndDate() {
         return wigellRepairsBookingEndDate;
     }
 
     public void setWigellRepairsBookingEndDate(LocalDate wigellRepairsBookingEndDate) {
         this.wigellRepairsBookingEndDate = wigellRepairsBookingEndDate;
-    }
+    }*/
 
     public Service getWigellRepairsBookingService() {
         return wigellRepairsBookingService;
@@ -93,13 +93,13 @@ public class Booking {
         this.wigellRepairsBookingService = wigellRepairsBookingService;
     }
 
-    public Boolean isCancelled() {
+    /*public Boolean isCancelled() {
         return wigellRepairsBookingCancelled;
     }
 
     public void setCancelled(Boolean wigellRepairsBookingCancelled) {
         this.wigellRepairsBookingCancelled = wigellRepairsBookingCancelled;
-    }
+    }*/
 
     public double getWigellRepairsBookingTotalPriceEuro() {
         return wigellRepairsBookingTotalPriceEuro;

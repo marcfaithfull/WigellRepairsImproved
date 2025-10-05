@@ -26,7 +26,7 @@ public class AdminController {
     @GetMapping("/listcancelled")
     @ResponseBody
     public ResponseEntity<List<Booking>> listCancelledBookings() {
-        adminService.listCancelled();
+        //adminService.listCancelled();
         return ResponseEntity.ok(adminService.listCancelled());
     }
 
@@ -63,8 +63,7 @@ public class AdminController {
 
     @PostMapping("/addtechnician")
     public ResponseEntity<String> addTechnician(@RequestBody Technician technician) {
-        adminService.addTechnician(technician);
-        return ResponseEntity.status(HttpStatus.CREATED).body("The technician has been added to the database");
+        return adminService.addTechnician(technician);
     }
 
     @GetMapping("/technicians")

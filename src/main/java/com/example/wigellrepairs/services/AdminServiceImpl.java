@@ -17,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @org.springframework.stereotype.Service
 @Transactional
@@ -73,31 +72,22 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     @Override
     public ResponseEntity<String> addService(Service service) {
-
         if (!technicianRepository.existsById(service.getWigellRepairsServiceTechnician().getWigellRepairsTechnicianId())) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Choose a technician from the database");
         }
-
         if (!service.getWigellRepairsServiceType().equals("Car") && !service.getWigellRepairsServiceType().equals("White goods") && !service.getWigellRepairsServiceType().equals("Electronics")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Area of expertise must be Car, White goods or Electronics (Case sensitive)");
         }
-
         Service serviceToSave = new Service();
-
         serviceToSave.setWigellRepairsServiceName(service.getWigellRepairsServiceName());
         serviceToSave.setWigellRepairsServiceType(service.getWigellRepairsServiceType());
         serviceToSave.setWigellRepairsServicePrice(service.getWigellRepairsServicePrice());
-
         Technician technician = technicianRepository.findTechnicianByWigellRepairsTechnicianId(service.getWigellRepairsServiceTechnician().getWigellRepairsTechnicianId());
-
         if (!technician.getWigellRepairsAreaOfExpertise().equals(service.getWigellRepairsServiceType())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Choose a technician with the correct area of expertise");
         }
-
         serviceToSave.setWigellRepairsServiceTechnician(technician);
-
         servicesRepository.save(serviceToSave);
-
         return ResponseEntity.status(HttpStatus.OK).body("The service was added successfully");
     }
 
@@ -105,26 +95,33 @@ public class AdminServiceImpl implements AdminService {
     public void updateService(Service service) {
         Service existingService = servicesRepository.findById(service.getWigellRepairsServiceId())
                 .orElseThrow(() -> new EntityNotFoundException("Service not found"));
-
         Technician existingTechnician = technicianRepository.findById(service.getWigellRepairsServiceTechnician().getWigellRepairsTechnicianId())
                 .orElseThrow(() -> new EntityNotFoundException("Technician not found"));
-
         existingService.setWigellRepairsServiceName(service.getWigellRepairsServiceName());
         existingService.setWigellRepairsServiceType(service.getWigellRepairsServiceType());
         existingService.setWigellRepairsServicePrice(service.getWigellRepairsServicePrice());
         existingService.setWigellRepairsServiceTechnician(existingTechnician);
-
         servicesRepository.save(existingService);
-
     }
 
     @Transactional
     @Override
     public ResponseEntity<String> remService(Long id) {
-
-        // MOTHER FUCKING METHOD!!!
-
-        return ResponseEntity.status(HttpStatus.OK).body("oeoeoeoeoeoeoeoeo");
+        Service serviceToRemove = servicesRepository.findServiceByWigellRepairsServiceId(id);
+        List<Booking> bookings = bookingsRepository.findAll();
+        List<Booking> bookingsWithMatchingService = new ArrayList<>();
+        for (Booking booking : bookings) {
+            if (booking.getWigellRepairsBookingService().getWigellRepairsServiceId().equals(serviceToRemove.getWigellRepairsServiceId()) &&
+                    booking.getWigellRepairsBookingCancelled().equals(false) &&
+                    booking.getWigellRepairsBookingDate().isAfter(LocalDate.now())) {
+                bookingsWithMatchingService.add(booking);
+            }
+        }
+        if (!bookingsWithMatchingService.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There are users that have booked this service");
+        }
+        servicesRepository.deleteServiceByWigellRepairsServiceId(serviceToRemove.getWigellRepairsServiceId());
+        return ResponseEntity.status(HttpStatus.OK).body("The service has been removed");
     }
 
     @Transactional
@@ -136,7 +133,6 @@ public class AdminServiceImpl implements AdminService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Area of expertise must be Car, White goods or Electronics (Case sensitive)");
         }
         technicianRepository.save(technician);
-
         return ResponseEntity.status(HttpStatus.CREATED).body("Technician added successfully");
     }
 

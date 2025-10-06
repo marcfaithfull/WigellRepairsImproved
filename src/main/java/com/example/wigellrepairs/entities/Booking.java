@@ -73,14 +73,6 @@ public class Booking {
         this.wigellRepairsBookingTotalPrice = wigellRepairsBookingTotalPrice;
     }
 
-    /*public LocalDate getWigellRepairsBookingEndDate() {
-        return wigellRepairsBookingEndDate;
-    }
-
-    public void setWigellRepairsBookingEndDate(LocalDate wigellRepairsBookingEndDate) {
-        this.wigellRepairsBookingEndDate = wigellRepairsBookingEndDate;
-    }*/
-
     public Service getWigellRepairsBookingService() {
         return wigellRepairsBookingService;
     }
@@ -88,14 +80,6 @@ public class Booking {
     public void setWigellRepairsBookingService(Service wigellRepairsBookingService) {
         this.wigellRepairsBookingService = wigellRepairsBookingService;
     }
-
-    /*public Boolean isCancelled() {
-        return wigellRepairsBookingCancelled;
-    }
-
-    public void setCancelled(Boolean wigellRepairsBookingCancelled) {
-        this.wigellRepairsBookingCancelled = wigellRepairsBookingCancelled;
-    }*/
 
     public double getWigellRepairsBookingTotalPriceEuro() {
         return wigellRepairsBookingTotalPriceEuro;

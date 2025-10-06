@@ -10,10 +10,5 @@ import java.util.List;
 @Repository
 public interface TechnicianRepository extends JpaRepository<Technician, Long> {
 
-    @Query("SELECT s.wigellRepairsTechnicianName FROM Technician s")
-    List<String> findAllTechnicianNames();
-
-    Technician findByWigellRepairsTechnicianName(String name);
-
     Technician findTechnicianByWigellRepairsTechnicianId(Long id);
 }

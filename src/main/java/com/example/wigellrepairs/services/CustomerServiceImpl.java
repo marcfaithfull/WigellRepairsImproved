@@ -6,7 +6,6 @@ import com.example.wigellrepairs.repositories.BookingsRepository;
 import com.example.wigellrepairs.repositories.ServicesRepository;
 import com.example.wigellrepairs.repositories.TechnicianRepository;
 import com.example.wigellrepairs.services.calculators.CurrencyConverter;
-import com.example.wigellrepairs.services.calculators.OrderCalculator;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
@@ -14,7 +13,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -29,18 +27,15 @@ public class CustomerServiceImpl implements CustomerService {
     private ServicesRepository servicesRepository;
     private TechnicianRepository technicianRepository;
     private CurrencyConverter currencyConverter;
-    private OrderCalculator orderCalculator;
     private static final Logger CUSTOMER_SERVICE_LOGGER = LogManager.getLogger(CustomerServiceImpl.class);
 
     @Autowired
     public CustomerServiceImpl(BookingsRepository bookingsRepository, ServicesRepository servicesRepository,
-                               TechnicianRepository technicianRepository, CurrencyConverter currencyConverter,
-                               OrderCalculator orderCalculator) {
+                               TechnicianRepository technicianRepository, CurrencyConverter currencyConverter) {
         this.bookingsRepository = bookingsRepository;
         this.servicesRepository = servicesRepository;
         this.technicianRepository = technicianRepository;
         this.currencyConverter = currencyConverter;
-        this.orderCalculator = orderCalculator;
     }
 
     @Override
@@ -54,10 +49,8 @@ public class CustomerServiceImpl implements CustomerService {
         Long serviceId = booking.getWigellRepairsBookingService().getWigellRepairsServiceId();
         Service serviceToBook = servicesRepository.findServiceByWigellRepairsServiceId(serviceId);
         booking.setWigellRepairsBookingTotalPrice(serviceToBook.getWigellRepairsServicePrice());
-        //orderCalculator.calculateTotalCost(booking, servicesRepository.findServiceByWigellRepairsServiceId(booking.getWigellRepairsBookingService().getWigellRepairsServiceId()));
         currencyConverter.convertSekToEuro(booking);
         bookingsRepository.save(booking);
-        // Logging
         CUSTOMER_SERVICE_LOGGER.info("{} booked service with id:{}",
                 booking.getWigellRepairsBookingCustomer(), booking.getWigellRepairsBookingService().getWigellRepairsServiceId());
     }
@@ -68,21 +61,17 @@ public class CustomerServiceImpl implements CustomerService {
         if (!optionalBooking.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There is no booking with this id");
         }
-
         Booking bookingToCancel = bookingsRepository.findById(booking.getWigellRepairsBookingId())
                 .orElseThrow(EntityNotFoundException::new);
-
         if (!bookingToCancel.getWigellRepairsBookingCustomer().equals(principal.getName())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not authorised to cancel this booking");
         }
-
         if (bookingToCancel.getWigellRepairsBookingDate().minusDays(1).isBefore(LocalDate.now())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("It is too late to cancel this service");
         }
-
         bookingToCancel.setWigellRepairsBookingCancelled(true);
         bookingsRepository.save(bookingToCancel);
-        return ResponseEntity.status(HttpStatus.OK).body("Your booking was cancelled");
+        return ResponseEntity.status(HttpStatus.OK).body("Your booking has been cancelled");
     }
 
     @Override

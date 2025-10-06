@@ -43,8 +43,7 @@ public class AdminController {
 
     @PostMapping("/addservice")
     public ResponseEntity<String> addService(@RequestBody Service service) {
-        adminService.addService(service);
-        return ResponseEntity.status(HttpStatus.CREATED).body("The service has been added");
+        return adminService.addService(service);
     }
 
     @PutMapping("/updateservice")
@@ -56,8 +55,8 @@ public class AdminController {
     @DeleteMapping("/remservice/{id}")
     @ResponseBody
     public ResponseEntity<String> remService(@PathVariable Long id) {
-        adminService.remService(id);
-        return ResponseEntity.ok("This service has been deleted");
+        return adminService.remService(id);
+
     }
 
     @PostMapping("/addtechnician")

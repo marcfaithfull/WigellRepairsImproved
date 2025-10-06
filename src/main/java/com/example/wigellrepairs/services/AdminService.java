@@ -15,11 +15,11 @@ public interface AdminService {
 
     List<Booking> listPast();
 
-    void addService(Service service);
+    ResponseEntity<String> addService(Service service);
 
     void updateService(Service service);
 
-    void remService(Long id);
+    ResponseEntity<String> remService(Long id);
 
     ResponseEntity<String> addTechnician(Technician technician);
 

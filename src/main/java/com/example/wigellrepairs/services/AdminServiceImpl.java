@@ -7,6 +7,7 @@ import com.example.wigellrepairs.repositories.BookingsRepository;
 import com.example.wigellrepairs.repositories.ServicesRepository;
 import com.example.wigellrepairs.repositories.TechnicianRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,9 +17,11 @@ import org.springframework.http.ResponseEntity;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @org.springframework.stereotype.Service
 @Transactional
+@PersistenceContext
 public class AdminServiceImpl implements AdminService {
     BookingsRepository bookingsRepository;
     ServicesRepository servicesRepository;
@@ -69,9 +72,33 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional
     @Override
-    public void addService(Service service) {
-        servicesRepository.save(service);
-        ADMIN_SERVICE_LOGGER.info("Service: {} has been added to the database", service.getWigellRepairsServiceName());
+    public ResponseEntity<String> addService(Service service) {
+
+        if (!technicianRepository.existsById(service.getWigellRepairsServiceTechnician().getWigellRepairsTechnicianId())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Choose a technician from the database");
+        }
+
+        if (!service.getWigellRepairsServiceType().equals("Car") && !service.getWigellRepairsServiceType().equals("White goods") && !service.getWigellRepairsServiceType().equals("Electronics")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Area of expertise must be Car, White goods or Electronics (Case sensitive)");
+        }
+
+        Service serviceToSave = new Service();
+
+        serviceToSave.setWigellRepairsServiceName(service.getWigellRepairsServiceName());
+        serviceToSave.setWigellRepairsServiceType(service.getWigellRepairsServiceType());
+        serviceToSave.setWigellRepairsServicePrice(service.getWigellRepairsServicePrice());
+
+        Technician technician = technicianRepository.findTechnicianByWigellRepairsTechnicianId(service.getWigellRepairsServiceTechnician().getWigellRepairsTechnicianId());
+
+        if (!technician.getWigellRepairsAreaOfExpertise().equals(service.getWigellRepairsServiceType())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Choose a technician with the correct area of expertise");
+        }
+
+        serviceToSave.setWigellRepairsServiceTechnician(technician);
+
+        servicesRepository.save(serviceToSave);
+
+        return ResponseEntity.status(HttpStatus.OK).body("The service was added successfully");
     }
 
     @Override
@@ -93,8 +120,11 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional
     @Override
-    public void remService(Long id) {
-        servicesRepository.deleteServiceByWigellRepairsServiceId(id);
+    public ResponseEntity<String> remService(Long id) {
+
+        // MOTHER FUCKING METHOD!!!
+
+        return ResponseEntity.status(HttpStatus.OK).body("oeoeoeoeoeoeoeoeo");
     }
 
     @Transactional

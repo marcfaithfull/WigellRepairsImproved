@@ -29,9 +29,6 @@ public class Booking {
     @Column
     private int wigellRepairsBookingTotalPrice;
 
-    @Column
-    private double wigellRepairsBookingTotalPriceEuro;
-
     @Column(nullable = false)
     private Boolean wigellRepairsBookingCancelled;
 
@@ -79,14 +76,6 @@ public class Booking {
 
     public void setWigellRepairsBookingService(Service wigellRepairsBookingService) {
         this.wigellRepairsBookingService = wigellRepairsBookingService;
-    }
-
-    public double getWigellRepairsBookingTotalPriceEuro() {
-        return wigellRepairsBookingTotalPriceEuro;
-    }
-
-    public void setWigellRepairsBookingTotalPriceEuro(double wigellRepairsBookingTotalPriceEuro) {
-        this.wigellRepairsBookingTotalPriceEuro = wigellRepairsBookingTotalPriceEuro;
     }
 
     public Boolean getWigellRepairsBookingCancelled() {

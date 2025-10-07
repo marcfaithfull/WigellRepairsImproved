@@ -1,5 +1,6 @@
 package com.example.wigellrepairs.controllers;
 
+import com.example.wigellrepairs.dto.BookingDto;
 import com.example.wigellrepairs.entities.Booking;
 import com.example.wigellrepairs.entities.Service;
 import com.example.wigellrepairs.services.CustomerServiceImpl;
@@ -44,7 +45,7 @@ public class CustomerController {
 
     @GetMapping("/mybookings")
     @ResponseBody
-    public ResponseEntity<List<Booking>> myBookings(Principal principal) {
+    public ResponseEntity<List<BookingDto>> myBookings(Principal principal) {
         customerService.myBookings(principal);
         return ResponseEntity.ok(customerService.myBookings(principal));
     }

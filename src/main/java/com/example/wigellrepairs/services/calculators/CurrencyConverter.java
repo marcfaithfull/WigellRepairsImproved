@@ -1,3 +1,4 @@
+/*
 package com.example.wigellrepairs.services.calculators;
 
 import com.example.wigellrepairs.entities.Booking;
@@ -12,3 +13,4 @@ public class CurrencyConverter {
         booking.setWigellRepairsBookingTotalPriceEuro(euro);
     }
 }
+*/

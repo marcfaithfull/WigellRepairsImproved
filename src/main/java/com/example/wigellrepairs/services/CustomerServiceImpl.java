@@ -1,11 +1,11 @@
 package com.example.wigellrepairs.services;
 
+import com.example.wigellrepairs.dto.BookingDto;
 import com.example.wigellrepairs.entities.Booking;
 import com.example.wigellrepairs.entities.Service;
 import com.example.wigellrepairs.repositories.BookingsRepository;
 import com.example.wigellrepairs.repositories.ServicesRepository;
 import com.example.wigellrepairs.repositories.TechnicianRepository;
-import com.example.wigellrepairs.services.calculators.CurrencyConverter;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
@@ -26,16 +26,17 @@ public class CustomerServiceImpl implements CustomerService {
     private BookingsRepository bookingsRepository;
     private ServicesRepository servicesRepository;
     private TechnicianRepository technicianRepository;
-    private CurrencyConverter currencyConverter;
+    //private CurrencyConverter currencyConverter;
     private static final Logger CUSTOMER_SERVICE_LOGGER = LogManager.getLogger(CustomerServiceImpl.class);
+    private static BookingDto bookingDTO;
 
     @Autowired
     public CustomerServiceImpl(BookingsRepository bookingsRepository, ServicesRepository servicesRepository,
-                               TechnicianRepository technicianRepository, CurrencyConverter currencyConverter) {
+                               TechnicianRepository technicianRepository) {
         this.bookingsRepository = bookingsRepository;
         this.servicesRepository = servicesRepository;
         this.technicianRepository = technicianRepository;
-        this.currencyConverter = currencyConverter;
+        //this.currencyConverter = currencyConverter;
     }
 
     @Override
@@ -49,7 +50,7 @@ public class CustomerServiceImpl implements CustomerService {
         Long serviceId = booking.getWigellRepairsBookingService().getWigellRepairsServiceId();
         Service serviceToBook = servicesRepository.findServiceByWigellRepairsServiceId(serviceId);
         booking.setWigellRepairsBookingTotalPrice(serviceToBook.getWigellRepairsServicePrice());
-        currencyConverter.convertSekToEuro(booking);
+        //currencyConverter.convertSekToEuro(booking);
         bookingsRepository.save(booking);
         CUSTOMER_SERVICE_LOGGER.info("{} booked service with id:{}",
                 booking.getWigellRepairsBookingCustomer(), booking.getWigellRepairsBookingService().getWigellRepairsServiceId());
@@ -75,7 +76,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Booking> myBookings(Principal principal) {
+    public List<BookingDto> myBookings(Principal principal) {
         List<Booking> allBookings = bookingsRepository.findAll();
         List<Booking> myBookings = new ArrayList<>();
         for (Booking booking : allBookings) {
@@ -83,6 +84,6 @@ public class CustomerServiceImpl implements CustomerService {
                 myBookings.add(booking);
             }
         }
-        return myBookings;
+        return BookingDto.bookingDtoList(myBookings);
     }
 }

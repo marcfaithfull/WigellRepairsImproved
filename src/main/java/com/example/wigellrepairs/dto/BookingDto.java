@@ -1,0 +1,54 @@
+package com.example.wigellrepairs.dto;
+
+import com.example.wigellrepairs.entities.Booking;
+import com.example.wigellrepairs.entities.Service;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class BookingDto {
+    private String customer;
+    private ServiceDto serviceDto;
+    private LocalDate dateOfService;
+
+    public static BookingDto bookingDto(Booking booking) {
+        BookingDto bookingDto = new BookingDto();
+        bookingDto.setCustomer(booking.getWigellRepairsBookingCustomer());
+        Service service = booking.getWigellRepairsBookingService();
+        bookingDto.setService(ServiceDto.serviceDto(service));
+        bookingDto.setDateOfService(booking.getWigellRepairsBookingDate());
+        return bookingDto;
+    }
+
+    public static List<BookingDto> bookingDtoList(List<Booking> bookings) {
+        return bookings.stream()
+                .map(BookingDto::bookingDto)
+                .collect(Collectors.toList());
+    }
+
+    // Getters and Setters
+    public String getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(String customer) {
+        this.customer = customer;
+    }
+
+    public ServiceDto getService() {
+        return serviceDto;
+    }
+
+    public void setService(ServiceDto service) {
+        this.serviceDto = service;
+    }
+
+    public LocalDate getDateOfService() {
+        return dateOfService;
+    }
+
+    public void setDateOfService(LocalDate dateOfService) {
+        this.dateOfService = dateOfService;
+    }
+}

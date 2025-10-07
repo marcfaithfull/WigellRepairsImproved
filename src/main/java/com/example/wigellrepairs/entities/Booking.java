@@ -26,8 +26,8 @@ public class Booking {
     @Column(nullable = false)
     private LocalDate wigellRepairsBookingDate;
 
-    @Column
-    private int wigellRepairsBookingTotalPrice;
+    /*@Column
+    private int wigellRepairsBookingTotalPrice;*/
 
     @Column(nullable = false)
     private Boolean wigellRepairsBookingCancelled;
@@ -62,13 +62,13 @@ public class Booking {
         this.wigellRepairsBookingDate = wigellRepairsBookingDate;
     }
 
-    public int getWigellRepairsBookingTotalPrice() {
+    /*public int getWigellRepairsBookingTotalPrice() {
         return wigellRepairsBookingTotalPrice;
     }
 
     public void setWigellRepairsBookingTotalPrice(int wigellRepairsBookingTotalPrice) {
         this.wigellRepairsBookingTotalPrice = wigellRepairsBookingTotalPrice;
-    }
+    }*/
 
     public Service getWigellRepairsBookingService() {
         return wigellRepairsBookingService;

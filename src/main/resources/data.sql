@@ -15,9 +15,8 @@ VALUES
 INSERT INTO wigellrepairs_bookings (wigell_repairs_booking_customer,
                                     wigell_repairs_service_id,
                                     wigell_repairs_booking_date,
-                                    wigell_repairs_booking_total_price,
                                     wigell_repairs_booking_cancelled)
 VALUES
-    ('Kurt',1,'2025-11-01',1000,false),
-    ('Dave',2,'2024-11-15',300,false),
-    ('Kurt',1,'2025-10-04',1000,false);
+    ('Kurt',1,'2025-11-01',false),
+    ('Dave',2,'2024-11-15',false),
+    ('Kurt',1,'2025-10-04',false);

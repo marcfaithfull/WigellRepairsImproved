@@ -8,12 +8,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class BookingDto {
+    private Long bookingId;
     private String customer;
     private ServiceDto serviceDto;
     private LocalDate dateOfService;
 
     public static BookingDto bookingDto(Booking booking) {
         BookingDto bookingDto = new BookingDto();
+        bookingDto.setBookingId(booking.getWigellRepairsBookingId());
         bookingDto.setCustomer(booking.getWigellRepairsBookingCustomer());
         Service service = booking.getWigellRepairsBookingService();
         bookingDto.setService(ServiceDto.serviceDto(service));
@@ -28,6 +30,14 @@ public class BookingDto {
     }
 
     // Getters and Setters
+    public Long getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(Long bookingId) {
+        this.bookingId = bookingId;
+    }
+
     public String getCustomer() {
         return customer;
     }

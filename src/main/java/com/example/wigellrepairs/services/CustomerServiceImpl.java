@@ -1,6 +1,7 @@
 package com.example.wigellrepairs.services;
 
 import com.example.wigellrepairs.dto.BookingDto;
+import com.example.wigellrepairs.dto.ServiceDto;
 import com.example.wigellrepairs.entities.Booking;
 import com.example.wigellrepairs.entities.Service;
 import com.example.wigellrepairs.repositories.BookingsRepository;
@@ -40,20 +41,26 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Service> services() {
-        return servicesRepository.findAll();
+    public List<ServiceDto> services() {
+        return ServiceDto.serviceDtoList(servicesRepository.findAll());
     }
 
     @Override
-    public void bookService(Booking booking, Principal principal) {
-        booking.setWigellRepairsBookingCustomer(principal.getName());
+    public ResponseEntity<String> bookService(Booking booking, Principal principal) {
         Long serviceId = booking.getWigellRepairsBookingService().getWigellRepairsServiceId();
         Service serviceToBook = servicesRepository.findServiceByWigellRepairsServiceId(serviceId);
-        booking.setWigellRepairsBookingTotalPrice(serviceToBook.getWigellRepairsServicePrice());
-        //currencyConverter.convertSekToEuro(booking);
+        if (serviceToBook == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There is no service with this id");
+        }
+        if (booking.getWigellRepairsBookingDate().isBefore(LocalDate.now())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You cannot book a service in the past");
+        }
+        booking.setWigellRepairsBookingCustomer(principal.getName());
+        //booking.setWigellRepairsBookingTotalPrice(serviceToBook.getWigellRepairsServicePrice());
         bookingsRepository.save(booking);
         CUSTOMER_SERVICE_LOGGER.info("{} booked service with id:{}",
                 booking.getWigellRepairsBookingCustomer(), booking.getWigellRepairsBookingService().getWigellRepairsServiceId());
+        return ResponseEntity.status(HttpStatus.CREATED).body("The service has been booked");
     }
 
     @Override

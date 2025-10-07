@@ -1,6 +1,7 @@
 package com.example.wigellrepairs.controllers;
 
 import com.example.wigellrepairs.dto.BookingDto;
+import com.example.wigellrepairs.dto.ServiceDto;
 import com.example.wigellrepairs.entities.Booking;
 import com.example.wigellrepairs.entities.Service;
 import com.example.wigellrepairs.services.CustomerServiceImpl;
@@ -26,15 +27,14 @@ public class CustomerController {
 
     @GetMapping("/services")
     @ResponseBody
-    public ResponseEntity<List<Service>> listAllServices() {
+    public ResponseEntity<List<ServiceDto>> listAllServices() {
         return ResponseEntity.ok(customerService.services());
     }
 
     @PostMapping("/bookservice")
     @ResponseBody
     public ResponseEntity<String> bookAService(@RequestBody Booking booking, Principal principal) {
-        customerService.bookService(booking, principal);
-        return ResponseEntity.status(HttpStatus.CREATED).body("The service has been booked");
+        return customerService.bookService(booking, principal);
     }
 
     @PutMapping("/cancelbooking")

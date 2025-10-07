@@ -12,5 +12,4 @@ public interface ServicesRepository extends JpaRepository<Service, Long> {
     void deleteServiceByWigellRepairsServiceId(@NonNull Long id);
 
     Service findServiceByWigellRepairsServiceId(Long id);
-
 }

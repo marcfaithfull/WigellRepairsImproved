@@ -6,7 +6,6 @@ import com.example.wigellrepairs.entities.Booking;
 import com.example.wigellrepairs.entities.Service;
 import com.example.wigellrepairs.repositories.BookingsRepository;
 import com.example.wigellrepairs.repositories.ServicesRepository;
-import com.example.wigellrepairs.repositories.TechnicianRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
@@ -26,18 +25,12 @@ import java.util.Optional;
 public class CustomerServiceImpl implements CustomerService {
     private BookingsRepository bookingsRepository;
     private ServicesRepository servicesRepository;
-    private TechnicianRepository technicianRepository;
-    //private CurrencyConverter currencyConverter;
     private static final Logger CUSTOMER_SERVICE_LOGGER = LogManager.getLogger(CustomerServiceImpl.class);
-    private static BookingDto bookingDTO;
 
     @Autowired
-    public CustomerServiceImpl(BookingsRepository bookingsRepository, ServicesRepository servicesRepository,
-                               TechnicianRepository technicianRepository) {
+    public CustomerServiceImpl(BookingsRepository bookingsRepository, ServicesRepository servicesRepository) {
         this.bookingsRepository = bookingsRepository;
         this.servicesRepository = servicesRepository;
-        this.technicianRepository = technicianRepository;
-        //this.currencyConverter = currencyConverter;
     }
 
     @Override
@@ -56,7 +49,6 @@ public class CustomerServiceImpl implements CustomerService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You cannot book a service in the past");
         }
         booking.setWigellRepairsBookingCustomer(principal.getName());
-        //booking.setWigellRepairsBookingTotalPrice(serviceToBook.getWigellRepairsServicePrice());
         bookingsRepository.save(booking);
         CUSTOMER_SERVICE_LOGGER.info("{} booked service with id:{}",
                 booking.getWigellRepairsBookingCustomer(), booking.getWigellRepairsBookingService().getWigellRepairsServiceId());

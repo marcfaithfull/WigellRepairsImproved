@@ -50,7 +50,7 @@ public class AdminServiceImpl implements AdminService {
         List<Booking> allBookings = bookingsRepository.findAll();
         List<Booking> upcomingBookings = new ArrayList<>();
         for (Booking booking : allBookings) {
-            if (booking.getWigellRepairsBookingDate().isAfter(LocalDate.now())) {
+            if (booking.getWigellRepairsBookingDate().isAfter(LocalDate.now()) && (!booking.getWigellRepairsBookingCancelled())) {
                 upcomingBookings.add(booking);
             }
         }

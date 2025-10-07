@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ServiceDto {
-    private Long id;
+    private Long serviceId;
     private String Name;
     private String Type;
     private int priceInSEK;
@@ -14,7 +14,7 @@ public class ServiceDto {
 
     public static ServiceDto serviceDto(Service service) {
         ServiceDto serviceDto = new ServiceDto();
-        serviceDto.setId(service.getWigellRepairsServiceId());
+        serviceDto.setServiceId(service.getWigellRepairsServiceId());
         serviceDto.setName(service.getWigellRepairsServiceName());
         serviceDto.setType(service.getWigellRepairsServiceType());
         serviceDto.setPriceInSEK(service.getWigellRepairsServicePrice());
@@ -34,12 +34,12 @@ public class ServiceDto {
     }
 
     // Getters and Setters
-    public Long getId() {
-        return id;
+    public Long getServiceId() {
+        return serviceId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setServiceId(Long serviceId) {
+        this.serviceId = serviceId;
     }
 
     public String getName() {

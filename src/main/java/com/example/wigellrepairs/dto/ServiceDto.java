@@ -3,6 +3,7 @@ package com.example.wigellrepairs.dto;
 import com.example.wigellrepairs.entities.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ServiceDto {
@@ -72,5 +73,22 @@ public class ServiceDto {
 
     public void setPriceInSEK(int priceInSEK) {
         this.priceInSEK = priceInSEK;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof ServiceDto)) return false;
+        ServiceDto serviceDto = (ServiceDto) object;
+        return priceInSEK == serviceDto.priceInSEK &&
+                Double.compare(serviceDto.priceInEURO, priceInEURO) == 0 &&
+                Objects.equals(serviceId, serviceDto.serviceId) &&
+                Objects.equals(serviceName, serviceDto.serviceName) &&
+                Objects.equals(serviceType, serviceDto.serviceType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(serviceId, serviceName, serviceType, priceInSEK, priceInEURO);
     }
 }

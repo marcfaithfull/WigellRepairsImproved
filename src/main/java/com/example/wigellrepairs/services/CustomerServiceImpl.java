@@ -40,13 +40,12 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public ResponseEntity<String> bookService(Booking booking, Principal principal) {
-        Long serviceId = booking.getWigellRepairsBookingService().getWigellRepairsServiceId();
-        Service serviceToBook = servicesRepository.findServiceByWigellRepairsServiceId(serviceId);
+        Service serviceToBook = servicesRepository.findServiceByWigellRepairsServiceId(booking.getWigellRepairsBookingService().getWigellRepairsServiceId());
         if (serviceToBook == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There is no service with this id");
         }
         if (booking.getWigellRepairsBookingDate().isBefore(LocalDate.now())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You cannot book a service in the past");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You cannot book using a past date");
         }
         List<Booking> bookings = bookingsRepository.findAll();
         for (Booking bookingInList : bookings) {

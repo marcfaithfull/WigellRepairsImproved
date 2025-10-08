@@ -13,7 +13,7 @@ INSERT INTO wigellrepairs_services (wigell_repairs_service_name,
                                     wigell_repairs_service_price,
                                     wigell_repairs_technician_id)
 VALUES
-    ('Front road side axle replacement','Car',2000,1),
+    ('Front road-side axle replacement','Car',2000,1),
     ('Windscreen wiper replacement','Car',300,2),
     ('Phone screen replacement','Electronic',500,3),
     ('Laptop speaker replacement','Electronic',1000,4),

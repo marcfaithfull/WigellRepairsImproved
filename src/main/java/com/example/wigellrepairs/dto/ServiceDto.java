@@ -7,16 +7,16 @@ import java.util.stream.Collectors;
 
 public class ServiceDto {
     private Long serviceId;
-    private String Name;
-    private String Type;
+    private String serviceName;
+    private String serviceType;
     private int priceInSEK;
     private double priceInEURO;
 
     public static ServiceDto serviceDto(Service service) {
         ServiceDto serviceDto = new ServiceDto();
         serviceDto.setServiceId(service.getWigellRepairsServiceId());
-        serviceDto.setName(service.getWigellRepairsServiceName());
-        serviceDto.setType(service.getWigellRepairsServiceType());
+        serviceDto.setServiceName(service.getWigellRepairsServiceName());
+        serviceDto.setServiceType(service.getWigellRepairsServiceType());
         serviceDto.setPriceInSEK(service.getWigellRepairsServicePrice());
         serviceDto.setPriceInEURO(convertToEuros(service.getWigellRepairsServicePrice()));
         return serviceDto;
@@ -42,20 +42,20 @@ public class ServiceDto {
         this.serviceId = serviceId;
     }
 
-    public String getName() {
-        return Name;
+    public String getServiceName() {
+        return serviceName;
     }
 
-    public void setName(String name) {
-        Name = name;
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
     }
 
-    public String getType() {
-        return Type;
+    public String getServiceType() {
+        return serviceType;
     }
 
-    public void setType(String type) {
-        Type = type;
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
     }
 
     public double getPriceInEURO() {

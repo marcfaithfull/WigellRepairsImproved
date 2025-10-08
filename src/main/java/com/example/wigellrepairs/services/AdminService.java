@@ -1,5 +1,6 @@
 package com.example.wigellrepairs.services;
 
+import com.example.wigellrepairs.dto.TechnicianDto;
 import com.example.wigellrepairs.entities.Booking;
 import com.example.wigellrepairs.entities.Service;
 import com.example.wigellrepairs.entities.Technician;
@@ -23,5 +24,5 @@ public interface AdminService {
 
     ResponseEntity<String> addTechnician(Technician technician);
 
-    List<Technician> technicians();
+    List<TechnicianDto> technicians();
 }

@@ -1,5 +1,6 @@
 package com.example.wigellrepairs.services;
 
+import com.example.wigellrepairs.dto.TechnicianDto;
 import com.example.wigellrepairs.entities.Booking;
 import com.example.wigellrepairs.entities.Service;
 import com.example.wigellrepairs.entities.Technician;
@@ -154,7 +155,7 @@ public class AdminServiceImpl implements AdminService {
         return ResponseEntity.status(HttpStatus.CREATED).body("Technician added successfully");
     }
 
-    public List<Technician> technicians() {
-        return technicianRepository.findAll();
+    public List<TechnicianDto> technicians() {
+        return TechnicianDto.technicianDtoList(technicianRepository.findAll());
     }
 }

@@ -48,6 +48,12 @@ public class CustomerServiceImpl implements CustomerService {
         if (booking.getWigellRepairsBookingDate().isBefore(LocalDate.now())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You cannot book a service in the past");
         }
+        List<Booking> bookings = bookingsRepository.findAll();
+        for (Booking bookingInList : bookings) {
+            if (bookingInList.getWigellRepairsBookingDate().equals(booking.getWigellRepairsBookingDate())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This date is not available. Try another date");
+            }
+        }
         booking.setWigellRepairsBookingCustomer(principal.getName());
         bookingsRepository.save(booking);
         CUSTOMER_SERVICE_LOGGER.info("{} booked service with id:{}",
@@ -68,6 +74,9 @@ public class CustomerServiceImpl implements CustomerService {
         }
         if (bookingToCancel.getWigellRepairsBookingDate().minusDays(1).isBefore(LocalDate.now())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("It is too late to cancel this service");
+        }
+        if (booking.getWigellRepairsBookingCancelled().equals(false)) {
+            return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body("wigellRepairsBookingCancelled must be set to 'true' to cancel a booking");
         }
         bookingToCancel.setWigellRepairsBookingCancelled(true);
         bookingsRepository.save(bookingToCancel);

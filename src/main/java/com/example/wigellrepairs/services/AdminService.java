@@ -17,7 +17,7 @@ public interface AdminService {
 
     ResponseEntity<String> addService(Service service);
 
-    void updateService(Service service);
+    ResponseEntity<String> updateService(Service service);
 
     ResponseEntity<String> remService(Long id);
 

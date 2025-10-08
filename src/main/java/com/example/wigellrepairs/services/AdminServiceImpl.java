@@ -6,7 +6,6 @@ import com.example.wigellrepairs.entities.Technician;
 import com.example.wigellrepairs.repositories.BookingsRepository;
 import com.example.wigellrepairs.repositories.ServicesRepository;
 import com.example.wigellrepairs.repositories.TechnicianRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
@@ -97,23 +96,33 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void updateService(Service service) {
-        Service existingService = servicesRepository.findById(service.getWigellRepairsServiceId())
-                .orElseThrow(() -> new EntityNotFoundException("Service not found"));
-        Technician existingTechnician = technicianRepository.findById(service.getWigellRepairsServiceTechnician().getWigellRepairsTechnicianId())
-                .orElseThrow(() -> new EntityNotFoundException("Technician not found"));
-        existingService.setWigellRepairsServiceName(service.getWigellRepairsServiceName());
-        existingService.setWigellRepairsServiceType(service.getWigellRepairsServiceType());
-        existingService.setWigellRepairsServicePrice(service.getWigellRepairsServicePrice());
-        existingService.setWigellRepairsServiceTechnician(existingTechnician);
-        ADMIN_SERVICE_LOGGER.info("Service with id '{}' was been updated", service.getWigellRepairsServiceId());
-        servicesRepository.save(existingService);
+    public ResponseEntity<String> updateService(Service service) {
+        if (!servicesRepository.existsById(service.getWigellRepairsServiceId())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There is no service with this id in the database");
+        }
+        Service serviceToUpdate = servicesRepository.findServiceByWigellRepairsServiceId(service.getWigellRepairsServiceId());
+        if (!technicianRepository.existsById(service.getWigellRepairsServiceTechnician().getWigellRepairsTechnicianId())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There is no technician with this id in the database");
+        }
+        Technician technicianToUpdate = technicianRepository.findTechnicianByWigellRepairsTechnicianId(service.getWigellRepairsServiceTechnician().getWigellRepairsTechnicianId());
+        if (!technicianToUpdate.getWigellRepairsAreaOfExpertise().equals(serviceToUpdate.getWigellRepairsServiceType())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Choose a technician with the correct area of expertise");
+        }
+        serviceToUpdate.setWigellRepairsServiceName(service.getWigellRepairsServiceName());
+        serviceToUpdate.setWigellRepairsServicePrice(service.getWigellRepairsServicePrice());
+        serviceToUpdate.setWigellRepairsServiceTechnician(technicianToUpdate);
+        ADMIN_SERVICE_LOGGER.info("Service with id '{}' was updated", service.getWigellRepairsServiceId());
+        servicesRepository.save(serviceToUpdate);
+        return ResponseEntity.status(HttpStatus.OK).body("This service has been updated");
     }
 
     @Transactional
     @Override
     public ResponseEntity<String> remService(Long id) {
         Service serviceToRemove = servicesRepository.findServiceByWigellRepairsServiceId(id);
+        if (!servicesRepository.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There is no service with this id in the database");
+        }
         List<Booking> bookings = bookingsRepository.findAll();
         List<Booking> bookingsWithMatchingService = new ArrayList<>();
         for (Booking booking : bookings) {
@@ -124,7 +133,7 @@ public class AdminServiceImpl implements AdminService {
             }
         }
         if (!bookingsWithMatchingService.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There are users that have booked this service");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You cannot remove this service because it has been booked by one or more users");
         }
         servicesRepository.deleteServiceByWigellRepairsServiceId(serviceToRemove.getWigellRepairsServiceId());
         ADMIN_SERVICE_LOGGER.info("Service: '{}' was removed from the database", serviceToRemove.getWigellRepairsServiceId());

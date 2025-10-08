@@ -47,8 +47,7 @@ public class AdminController {
 
     @PutMapping("/updateservice")
     public ResponseEntity<String> updateService(@RequestBody Service service) {
-        adminService.updateService(service);
-        return ResponseEntity.ok("This service has been updated");
+        return adminService.updateService(service);
     }
 
     @DeleteMapping("/remservice/{id}")

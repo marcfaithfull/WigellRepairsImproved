@@ -22,9 +22,9 @@ import java.util.List;
 @Transactional
 @PersistenceContext
 public class AdminServiceImpl implements AdminService {
-    BookingsRepository bookingsRepository;
-    ServicesRepository servicesRepository;
-    TechnicianRepository technicianRepository;
+    private final BookingsRepository bookingsRepository;
+    private final ServicesRepository servicesRepository;
+    private final TechnicianRepository technicianRepository;
     private static final Logger ADMIN_SERVICE_LOGGER = LogManager.getLogger(AdminServiceImpl.class);
 
     public AdminServiceImpl(BookingsRepository bookingsRepository, ServicesRepository servicesRepository, TechnicianRepository technicianRepository) {

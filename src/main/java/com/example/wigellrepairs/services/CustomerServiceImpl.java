@@ -23,8 +23,8 @@ import java.util.Optional;
 @org.springframework.stereotype.Service
 @Transactional
 public class CustomerServiceImpl implements CustomerService {
-    private BookingsRepository bookingsRepository;
-    private ServicesRepository servicesRepository;
+    private final BookingsRepository bookingsRepository;
+    private final ServicesRepository servicesRepository;
     private static final Logger CUSTOMER_SERVICE_LOGGER = LogManager.getLogger(CustomerServiceImpl.class);
 
     @Autowired
@@ -64,7 +64,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public ResponseEntity<String> cancelBooking(Booking booking, Principal principal) {
         Optional<Booking> optionalBooking = bookingsRepository.findById(booking.getWigellRepairsBookingId());
-        if (!optionalBooking.isPresent()) {
+        if (optionalBooking.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There is no booking with this id");
         }
         Booking bookingToCancel = bookingsRepository.findById(booking.getWigellRepairsBookingId())

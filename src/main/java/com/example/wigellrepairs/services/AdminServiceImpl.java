@@ -75,19 +75,24 @@ public class AdminServiceImpl implements AdminService {
         if (!technicianRepository.existsById(service.getWigellRepairsServiceTechnician().getWigellRepairsTechnicianId())) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Choose a technician from the database");
         }
-        if (!service.getWigellRepairsServiceType().equals("Car") && !service.getWigellRepairsServiceType().equals("White goods") && !service.getWigellRepairsServiceType().equals("Electronics")) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Area of expertise must be Car, White goods or Electronics (Case sensitive)");
+        if (!service.getWigellRepairsServiceType().equals("Car") &&
+                !service.getWigellRepairsServiceType().equals("White goods") &&
+                !service.getWigellRepairsServiceType().equals("Electronics")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body
+                    ("Area of expertise must be Car, White goods or Electronics (Case sensitive)");
         }
         Service serviceToSave = new Service();
         serviceToSave.setWigellRepairsServiceName(service.getWigellRepairsServiceName());
         serviceToSave.setWigellRepairsServiceType(service.getWigellRepairsServiceType());
         serviceToSave.setWigellRepairsServicePrice(service.getWigellRepairsServicePrice());
-        Technician technician = technicianRepository.findTechnicianByWigellRepairsTechnicianId(service.getWigellRepairsServiceTechnician().getWigellRepairsTechnicianId());
+        Technician technician = technicianRepository.findTechnicianByWigellRepairsTechnicianId(
+                service.getWigellRepairsServiceTechnician().getWigellRepairsTechnicianId());
         if (!technician.getWigellRepairsAreaOfExpertise().equals(service.getWigellRepairsServiceType())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Choose a technician with the correct area of expertise");
         }
         serviceToSave.setWigellRepairsServiceTechnician(technician);
         servicesRepository.save(serviceToSave);
+        ADMIN_SERVICE_LOGGER.info("Service: '{}' was added to the database", serviceToSave.getWigellRepairsServiceName());
         return ResponseEntity.status(HttpStatus.OK).body("The service was added successfully");
     }
 
@@ -101,6 +106,7 @@ public class AdminServiceImpl implements AdminService {
         existingService.setWigellRepairsServiceType(service.getWigellRepairsServiceType());
         existingService.setWigellRepairsServicePrice(service.getWigellRepairsServicePrice());
         existingService.setWigellRepairsServiceTechnician(existingTechnician);
+        ADMIN_SERVICE_LOGGER.info("Service with id '{}' was been updated", service.getWigellRepairsServiceId());
         servicesRepository.save(existingService);
     }
 
@@ -121,6 +127,7 @@ public class AdminServiceImpl implements AdminService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There are users that have booked this service");
         }
         servicesRepository.deleteServiceByWigellRepairsServiceId(serviceToRemove.getWigellRepairsServiceId());
+        ADMIN_SERVICE_LOGGER.info("Service: '{}' was removed from the database", serviceToRemove.getWigellRepairsServiceId());
         return ResponseEntity.status(HttpStatus.OK).body("The service has been removed");
     }
 
@@ -133,6 +140,8 @@ public class AdminServiceImpl implements AdminService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Area of expertise must be Car, White goods or Electronics (Case sensitive)");
         }
         technicianRepository.save(technician);
+        ADMIN_SERVICE_LOGGER.info("Technician '{}' with the area of expertise '{}' was added to the database",
+                technician.getWigellRepairsTechnicianName(), technician.getWigellRepairsAreaOfExpertise());
         return ResponseEntity.status(HttpStatus.CREATED).body("Technician added successfully");
     }
 

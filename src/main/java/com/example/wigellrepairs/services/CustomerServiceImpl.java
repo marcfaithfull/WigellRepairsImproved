@@ -66,8 +66,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (optionalBooking.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There is no booking with this id");
         }
-        Booking bookingToCancel = bookingsRepository.findById(booking.getWigellRepairsBookingId())
-                .orElseThrow(EntityNotFoundException::new);
+        Booking bookingToCancel = optionalBooking.get();
         if (!bookingToCancel.getWigellRepairsBookingCustomer().equals(principal.getName())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not authorised to cancel this booking");
         }

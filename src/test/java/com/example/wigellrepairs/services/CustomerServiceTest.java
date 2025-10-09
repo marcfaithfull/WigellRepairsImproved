@@ -18,6 +18,7 @@ import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -182,7 +183,51 @@ class CustomerServiceTest {
     }
 
     @Test
-    void cancelBooking() {
+    void ShouldReturnBadRequest_WhenIdIsNotFound() {
+        Principal principal = new Principal() {
+            @Override
+            public String getName() {
+                return "Sand Person";
+            }
+        };
+        Booking booking = new Booking();
+        booking.setWigellRepairsBookingId(999L);
+
+        when(bookingsRepository.findById(999L)).thenReturn(Optional.empty());
+
+        ResponseEntity<String> result = customerService.cancelBooking(booking, principal);
+
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+        assertEquals("There is no booking with this id", result.getBody());
+
+        verify(bookingsRepository, times(1)).findById(999L);
+        verify(bookingsRepository, never()).save(any(Booking.class));
+    }
+
+    @Test
+    void ShouldReturnForbidden_WhenUserIsNotAuthorised() {
+        Principal principal = new Principal() {
+            @Override
+            public String getName() {
+                return "R2D2";
+            }
+        };
+        Booking booking = new Booking();
+        booking.setWigellRepairsBookingId(1L);
+        booking.setWigellRepairsBookingDate(LocalDate.now().plusDays(1));
+        booking.setWigellRepairsBookingCancelled(true);
+        booking.setWigellRepairsBookingCustomer("NotR2D2");
+
+        when(bookingsRepository.findById(1L)).thenReturn(Optional.of(booking));
+        //when(bookingsRepository.save(any(Booking.class))).thenReturn(booking);
+
+        ResponseEntity<String> result = customerService.cancelBooking(booking, principal);
+
+        assertEquals(HttpStatus.FORBIDDEN, result.getStatusCode());
+        assertEquals("You are not authorised to cancel this booking", result.getBody());
+
+        verify(bookingsRepository, times(1)).findById(booking.getWigellRepairsBookingId());
+        verify(bookingsRepository, times(0)).save(any(Booking.class));
     }
 
     @Test

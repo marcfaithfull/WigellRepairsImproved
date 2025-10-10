@@ -71,7 +71,7 @@ public class CustomerServiceImpl implements CustomerService {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not authorised to cancel this booking");
         }
         if (bookingToCancel.getWigellRepairsBookingDate().minusDays(1).isBefore(LocalDate.now())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("It is too late to cancel this service");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("It is too late to cancel this booking");
         }
         if (booking.getWigellRepairsBookingCancelled().equals(false)) {
             return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body("wigellRepairsBookingCancelled must be set to 'true' to cancel a booking");

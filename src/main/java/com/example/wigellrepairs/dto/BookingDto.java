@@ -5,6 +5,7 @@ import com.example.wigellrepairs.entities.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class BookingDto {
@@ -61,4 +62,16 @@ public class BookingDto {
     public void setDateOfService(LocalDate dateOfService) {
         this.dateOfService = dateOfService;
     }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof BookingDto)) return false;
+        BookingDto bookingDto = (BookingDto) object;
+        return customer == bookingDto.customer &&
+                dateOfService.equals(bookingDto.dateOfService);
+    }
+
+    @Override
+    public int hashCode() {return Objects.hash(bookingId, customer, dateOfService);}
 }

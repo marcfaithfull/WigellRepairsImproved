@@ -1,5 +1,6 @@
 package com.example.wigellrepairs.services;
 
+import com.example.wigellrepairs.dto.BookingDto;
 import com.example.wigellrepairs.dto.ServiceDto;
 import com.example.wigellrepairs.entities.Booking;
 import com.example.wigellrepairs.entities.Service;
@@ -55,6 +56,7 @@ class CustomerServiceTest {
         testServiceTwo.setWigellRepairsServiceName("Service B");
         testServiceTwo.setWigellRepairsServiceType("Electronics");
         testServiceTwo.setWigellRepairsServicePrice(2000);
+
         List<Service> servicesTestList = Arrays.asList(testServiceOne, testServiceTwo);
 
         when(servicesRepository.findAll()).thenReturn(servicesTestList);
@@ -231,6 +233,111 @@ class CustomerServiceTest {
     }
 
     @Test
-    void myBookings() {
+    void ShouldReturnOk_WhenUserIsAuthorised() {
+        Principal principal = new Principal() {
+            @Override
+            public String getName() {return "R2D2";}
+        };
+        Booking booking = new Booking();
+        booking.setWigellRepairsBookingId(1L);
+        booking.setWigellRepairsBookingDate(LocalDate.now().plusDays(1));
+        booking.setWigellRepairsBookingCancelled(true);
+        booking.setWigellRepairsBookingCustomer("R2D2");
+        when(bookingsRepository.findById(1L)).thenReturn(Optional.of(booking));
+        ResponseEntity<String> result = customerService.cancelBooking(booking, principal);
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals("Your booking has been cancelled", result.getBody());
+        verify(bookingsRepository, times(1)).findById(1L);
+        verify(bookingsRepository, times(1)).save(booking);
+    }
+
+    @Test
+    void ShouldReturnForbidden_WhenItIsTooLate() {
+        Principal principal = new Principal() {
+            @Override
+            public String getName() {return "R2D2";}
+        };
+        Booking booking = new Booking();
+        booking.setWigellRepairsBookingId(1L);
+        booking.setWigellRepairsBookingDate(LocalDate.now().minusDays(1));
+        booking.setWigellRepairsBookingCancelled(true);
+        booking.setWigellRepairsBookingCustomer("R2D2");
+        when(bookingsRepository.findById(1L)).thenReturn(Optional.of(booking));
+        ResponseEntity<String> result = customerService.cancelBooking(booking, principal);
+        assertEquals(HttpStatus.FORBIDDEN, result.getStatusCode());
+        assertEquals("It is too late to cancel this booking", result.getBody());
+        verify(bookingsRepository, times(1)).findById(1L);
+        verify(bookingsRepository, times(0)).save(booking);
+    }
+
+    @Test
+    void ShouldReturnIamATeaPot_WhenCancelNotSetToTrue() {
+        Principal principal = new Principal() {
+            @Override
+            public String getName() {return "R2D2";}
+        };
+        Booking booking = new Booking();
+        booking.setWigellRepairsBookingId(1L);
+        booking.setWigellRepairsBookingDate(LocalDate.now().plusDays(1));
+        booking.setWigellRepairsBookingCancelled(false);
+        booking.setWigellRepairsBookingCustomer("R2D2");
+        when(bookingsRepository.findById(1L)).thenReturn(Optional.of(booking));
+        ResponseEntity<String> result = customerService.cancelBooking(booking, principal);
+        assertEquals(HttpStatus.I_AM_A_TEAPOT, result.getStatusCode());
+        assertEquals("wigellRepairsBookingCancelled must be set to 'true' to cancel a booking", result.getBody());
+    }
+
+    @Test
+    void ShouldReturnOK_WhenBookingIsSuccessful() {
+        Principal principal = new Principal() {
+            @Override
+            public String getName() {return "R2D2";}
+        };
+        Booking booking = new Booking();
+        booking.setWigellRepairsBookingId(1L);
+        booking.setWigellRepairsBookingDate(LocalDate.now().plusDays(1));
+        booking.setWigellRepairsBookingCancelled(true);
+        booking.setWigellRepairsBookingCustomer("R2D2");
+        when(bookingsRepository.findById(1L)).thenReturn(Optional.of(booking));
+        ResponseEntity<String> result = customerService.cancelBooking(booking, principal);
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals("Your booking has been cancelled", result.getBody());
+        verify(bookingsRepository, times(1)).findById(1L);
+        verify(bookingsRepository, times(1)).save(booking);
+    }
+
+    @Test
+    void ShouldReturnUsersBookings_WhenUserNameMatches() {
+        Principal principal = new Principal() {
+            @Override
+            public String getName() {return "R2D2";}
+        };
+        Booking booking1 = new Booking();
+        booking1.setWigellRepairsBookingId(1L);
+        booking1.setWigellRepairsBookingDate(LocalDate.now().plusDays(1));
+        booking1.setWigellRepairsBookingCancelled(false);
+        booking1.setWigellRepairsBookingCustomer("R2D2");
+
+        Service service1 = new Service();
+        booking1.setWigellRepairsBookingService(service1);
+
+        Booking booking2 = new Booking();
+        booking2.setWigellRepairsBookingId(2L);
+        booking2.setWigellRepairsBookingDate(LocalDate.now().plusDays(1));
+        booking2.setWigellRepairsBookingCancelled(false);
+        booking2.setWigellRepairsBookingCustomer("R2D2");
+
+        Service service2 = new Service();
+        booking2.setWigellRepairsBookingService(service2);
+
+        List<Booking> allBookings = Arrays.asList(booking1, booking2);
+
+        when(bookingsRepository.findAll()).thenReturn(allBookings);
+
+        List<BookingDto> expected = BookingDto.bookingDtoList(allBookings);
+        List<BookingDto> actual = customerService.myBookings(principal);
+
+        assertEquals(expected, actual);
+        verify(bookingsRepository, times(1)).findAll();
     }
 }

@@ -27,8 +27,6 @@ public class AdminController {
         this.TECHNICIAN_SERVICE = technicianService;
     }
 
-
-
     // Bookings
 
     @GetMapping("/listcancelled")
@@ -46,8 +44,6 @@ public class AdminController {
         return ResponseEntity.ok(BOOKING_SERVICE.listPast());
     }
 
-
-
     // Service
 
     @PostMapping("/addservice")
@@ -63,10 +59,7 @@ public class AdminController {
     @DeleteMapping("/remservice/{id}")
     public ResponseEntity<String> remService(@PathVariable Long id) {
         return SERVICE_SERVICE.remService(id);
-
     }
-
-
 
     // Technician
 

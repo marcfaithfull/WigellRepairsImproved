@@ -34,17 +34,8 @@ class BookingServiceTest {
     @Mock
     private ServicesRepository servicesRepository;
 
-    @Mock
-    private Principal principal;
-
-    @Mock
-    private static Logger CUSTOMER_SERVICE_LOGGER;
-
     @InjectMocks
     private BookingServiceImpl bookingService;
-
-    @InjectMocks
-    private ServicesServiceImpl serviceService;
 
     @Test
     void ShouldReturnBadRequest_WhenServiceIsNull() {
@@ -149,7 +140,7 @@ class BookingServiceTest {
         booking.setWigellRepairsBookingService(service);
 
         when(servicesRepository.findServiceByWigellRepairsServiceId(service.getWigellRepairsServiceId())).thenReturn(service);
-        when(bookingsRepository.save(booking)).thenReturn(booking);
+        //when(bookingsRepository.save(booking)).thenReturn(booking);
 
         ResponseEntity<String> response = bookingService.bookService(booking, principal);
 

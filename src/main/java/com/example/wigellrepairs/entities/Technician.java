@@ -24,6 +24,11 @@ public class Technician {
     private List<Service> services;
 
 
+    public Technician(String wigellRepairsTechnicianName, String wigellRepairsAreaOfExpertise) {
+        this.wigellRepairsTechnicianName = wigellRepairsTechnicianName;
+        this.wigellRepairsAreaOfExpertise = wigellRepairsAreaOfExpertise;
+    }
+
     // Getters and Setters
     public Long getWigellRepairsTechnicianId() {
         return wigellRepairsTechnicianId;

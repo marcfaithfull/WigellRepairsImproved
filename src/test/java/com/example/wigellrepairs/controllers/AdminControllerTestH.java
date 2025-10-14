@@ -62,7 +62,7 @@ class AdminControllerTestH {
 
              Assertions.assertFalse(technicians.isEmpty());;//we received a list
 
-        Assertions.assertTrue(persistedTechnicianInList.size() == 1); //the persisted technician is in listResponse. // Maybe we can test AddTechnician, and later use a test that addstechnician via controller and later checks calling technicians from the endpoint
+        Assertions.assertEquals(1, persistedTechnicianInList.size()); //the persisted technician is in listResponse. // Maybe we can test AddTechnician, and later use a test that addstechnician via controller and later checks calling technicians from the endpoint
 
         }
 

@@ -3,9 +3,8 @@ package com.example.wigellrepairs.services;
 import com.example.wigellrepairs.dto.BookingDto;
 import com.example.wigellrepairs.entities.Booking;
 import com.example.wigellrepairs.entities.Service;
-import com.example.wigellrepairs.repositories.BookingsRepository;
-import com.example.wigellrepairs.repositories.ServicesRepository;
-import org.apache.logging.log4j.Logger;
+import com.example.wigellrepairs.repositories.BookingRepository;
+import com.example.wigellrepairs.repositories.ServiceRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,10 +28,10 @@ import static org.mockito.Mockito.*;
 class BookingServiceTest {
 
     @Mock
-    private BookingsRepository bookingsRepository;
+    private BookingRepository bookingRepository;
 
     @Mock
-    private ServicesRepository servicesRepository;
+    private ServiceRepository serviceRepository;
 
     @InjectMocks
     private BookingServiceImpl bookingService;
@@ -52,7 +51,7 @@ class BookingServiceTest {
         service.setWigellRepairsServiceId(testId);
         booking.setWigellRepairsBookingService(service);
 
-        when(servicesRepository.findServiceByWigellRepairsServiceId(testId)).thenReturn(null);
+        when(serviceRepository.findServiceByWigellRepairsServiceId(testId)).thenReturn(null);
 
         // Act
         ResponseEntity<String> response = bookingService.bookService(booking, principal);
@@ -60,7 +59,7 @@ class BookingServiceTest {
         // Assert
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("There is no service with this id", response.getBody());
-        verify(servicesRepository).findServiceByWigellRepairsServiceId(testId);
+        verify(serviceRepository).findServiceByWigellRepairsServiceId(testId);
     }
 
     @Test
@@ -79,7 +78,7 @@ class BookingServiceTest {
         invalidBooking.setWigellRepairsBookingService(service);
         invalidBooking.getWigellRepairsBookingService().setWigellRepairsServiceId(1L);
 
-        when(servicesRepository.findServiceByWigellRepairsServiceId(1L)).thenReturn(service);
+        when(serviceRepository.findServiceByWigellRepairsServiceId(1L)).thenReturn(service);
 
         // Act
         ResponseEntity<String> response = bookingService.bookService(invalidBooking, principal);
@@ -87,7 +86,7 @@ class BookingServiceTest {
         // Assert
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("You cannot book using a past date", response.getBody());
-        verify(servicesRepository, times(1)).findServiceByWigellRepairsServiceId(any());
+        verify(serviceRepository, times(1)).findServiceByWigellRepairsServiceId(any());
     }
 
     @Test
@@ -113,15 +112,15 @@ class BookingServiceTest {
 
         List<Booking> allBookings = List.of(existingBooking);
 
-        when(servicesRepository.findServiceByWigellRepairsServiceId(anyLong())).thenReturn(service);
-        when(bookingsRepository.findAll()).thenReturn(allBookings);
+        when(serviceRepository.findServiceByWigellRepairsServiceId(anyLong())).thenReturn(service);
+        when(bookingRepository.findAll()).thenReturn(allBookings);
 
         ResponseEntity<String> response = bookingService.bookService(booking, principal);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("This date is not available. Try another date", response.getBody());
-        verify(servicesRepository, times(1)).findServiceByWigellRepairsServiceId(anyLong());
-        verify(bookingsRepository, times(1)).findAll();
+        verify(serviceRepository, times(1)).findServiceByWigellRepairsServiceId(anyLong());
+        verify(bookingRepository, times(1)).findAll();
     }
 
     @Test
@@ -139,14 +138,14 @@ class BookingServiceTest {
         service.setWigellRepairsServiceId(1L);
         booking.setWigellRepairsBookingService(service);
 
-        when(servicesRepository.findServiceByWigellRepairsServiceId(service.getWigellRepairsServiceId())).thenReturn(service);
+        when(serviceRepository.findServiceByWigellRepairsServiceId(service.getWigellRepairsServiceId())).thenReturn(service);
         //when(bookingsRepository.save(booking)).thenReturn(booking);
 
         ResponseEntity<String> response = bookingService.bookService(booking, principal);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals("The service has been booked", response.getBody());
-        verify(bookingsRepository, times(1)).save(booking);
+        verify(bookingRepository, times(1)).save(booking);
     }
 
     @Test
@@ -160,15 +159,15 @@ class BookingServiceTest {
         Booking booking = new Booking();
         booking.setWigellRepairsBookingId(999L);
 
-        when(bookingsRepository.findById(999L)).thenReturn(Optional.empty());
+        when(bookingRepository.findById(999L)).thenReturn(Optional.empty());
 
         ResponseEntity<String> result = bookingService.cancelBooking(booking, principal);
 
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         assertEquals("There is no booking with this id", result.getBody());
 
-        verify(bookingsRepository, times(1)).findById(999L);
-        verify(bookingsRepository, never()).save(any(Booking.class));
+        verify(bookingRepository, times(1)).findById(999L);
+        verify(bookingRepository, never()).save(any(Booking.class));
     }
 
     @Test
@@ -185,7 +184,7 @@ class BookingServiceTest {
         booking.setWigellRepairsBookingCancelled(true);
         booking.setWigellRepairsBookingCustomer("NotR2D2");
 
-        when(bookingsRepository.findById(1L)).thenReturn(Optional.of(booking));
+        when(bookingRepository.findById(1L)).thenReturn(Optional.of(booking));
         //when(bookingsRepository.save(any(Booking.class))).thenReturn(booking);
 
         ResponseEntity<String> result = bookingService.cancelBooking(booking, principal);
@@ -193,8 +192,8 @@ class BookingServiceTest {
         assertEquals(HttpStatus.FORBIDDEN, result.getStatusCode());
         assertEquals("You are not authorised to cancel this booking", result.getBody());
 
-        verify(bookingsRepository, times(1)).findById(booking.getWigellRepairsBookingId());
-        verify(bookingsRepository, times(0)).save(any(Booking.class));
+        verify(bookingRepository, times(1)).findById(booking.getWigellRepairsBookingId());
+        verify(bookingRepository, times(0)).save(any(Booking.class));
     }
 
     @Test
@@ -208,12 +207,12 @@ class BookingServiceTest {
         booking.setWigellRepairsBookingDate(LocalDate.now().plusDays(1));
         booking.setWigellRepairsBookingCancelled(true);
         booking.setWigellRepairsBookingCustomer("R2D2");
-        when(bookingsRepository.findById(1L)).thenReturn(Optional.of(booking));
+        when(bookingRepository.findById(1L)).thenReturn(Optional.of(booking));
         ResponseEntity<String> result = bookingService.cancelBooking(booking, principal);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("Your booking has been cancelled", result.getBody());
-        verify(bookingsRepository, times(1)).findById(1L);
-        verify(bookingsRepository, times(1)).save(booking);
+        verify(bookingRepository, times(1)).findById(1L);
+        verify(bookingRepository, times(1)).save(booking);
     }
 
     @Test
@@ -227,12 +226,12 @@ class BookingServiceTest {
         booking.setWigellRepairsBookingDate(LocalDate.now().minusDays(1));
         booking.setWigellRepairsBookingCancelled(true);
         booking.setWigellRepairsBookingCustomer("R2D2");
-        when(bookingsRepository.findById(1L)).thenReturn(Optional.of(booking));
+        when(bookingRepository.findById(1L)).thenReturn(Optional.of(booking));
         ResponseEntity<String> result = bookingService.cancelBooking(booking, principal);
         assertEquals(HttpStatus.FORBIDDEN, result.getStatusCode());
         assertEquals("It is too late to cancel this booking", result.getBody());
-        verify(bookingsRepository, times(1)).findById(1L);
-        verify(bookingsRepository, times(0)).save(booking);
+        verify(bookingRepository, times(1)).findById(1L);
+        verify(bookingRepository, times(0)).save(booking);
     }
 
     @Test
@@ -246,7 +245,7 @@ class BookingServiceTest {
         booking.setWigellRepairsBookingDate(LocalDate.now().plusDays(1));
         booking.setWigellRepairsBookingCancelled(false);
         booking.setWigellRepairsBookingCustomer("R2D2");
-        when(bookingsRepository.findById(1L)).thenReturn(Optional.of(booking));
+        when(bookingRepository.findById(1L)).thenReturn(Optional.of(booking));
         ResponseEntity<String> result = bookingService.cancelBooking(booking, principal);
         assertEquals(HttpStatus.I_AM_A_TEAPOT, result.getStatusCode());
         assertEquals("wigellRepairsBookingCancelled must be set to 'true' to cancel a booking", result.getBody());
@@ -263,12 +262,12 @@ class BookingServiceTest {
         booking.setWigellRepairsBookingDate(LocalDate.now().plusDays(1));
         booking.setWigellRepairsBookingCancelled(true);
         booking.setWigellRepairsBookingCustomer("R2D2");
-        when(bookingsRepository.findById(1L)).thenReturn(Optional.of(booking));
+        when(bookingRepository.findById(1L)).thenReturn(Optional.of(booking));
         ResponseEntity<String> result = bookingService.cancelBooking(booking, principal);
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("Your booking has been cancelled", result.getBody());
-        verify(bookingsRepository, times(1)).findById(1L);
-        verify(bookingsRepository, times(1)).save(booking);
+        verify(bookingRepository, times(1)).findById(1L);
+        verify(bookingRepository, times(1)).save(booking);
     }
 
     @Test
@@ -297,13 +296,13 @@ class BookingServiceTest {
 
         List<Booking> allBookings = Arrays.asList(booking1, booking2);
 
-        when(bookingsRepository.findAll()).thenReturn(allBookings);
+        when(bookingRepository.findAll()).thenReturn(allBookings);
 
         List<BookingDto> expected = BookingDto.bookingDtoList(allBookings);
         List<BookingDto> actual = bookingService.myBookings(principal);
 
         assertEquals(expected, actual);
-        verify(bookingsRepository, times(1)).findAll();
+        verify(bookingRepository, times(1)).findAll();
     }
 
 }

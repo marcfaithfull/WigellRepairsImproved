@@ -2,7 +2,7 @@ package com.example.wigellrepairs.services;
 
 import com.example.wigellrepairs.dto.ServiceDto;
 import com.example.wigellrepairs.entities.Service;
-import com.example.wigellrepairs.repositories.ServicesRepository;
+import com.example.wigellrepairs.repositories.ServiceRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.*;
 class ServicesServiceTest {
 
     @Mock
-    private ServicesRepository servicesRepository;
+    private ServiceRepository serviceRepository;
 
     @InjectMocks
     private ServicesServiceImpl serviceService;
@@ -41,7 +41,7 @@ class ServicesServiceTest {
 
         List<Service> servicesTestList = Arrays.asList(testServiceOne, testServiceTwo);
 
-        when(servicesRepository.findAll()).thenReturn(servicesTestList);
+        when(serviceRepository.findAll()).thenReturn(servicesTestList);
 
         // Expected
         List<ServiceDto> expected = ServiceDto.serviceDtoList(servicesTestList);
@@ -51,7 +51,7 @@ class ServicesServiceTest {
 
         // Assert
         assertEquals(expected, actual);
-        verify(servicesRepository, times(1)).findAll();
+        verify(serviceRepository, times(1)).findAll();
     }
 
 }

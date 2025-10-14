@@ -8,7 +8,7 @@ import java.util.List;
 
 
 @Repository
-public interface BookingsRepository extends JpaRepository<Booking, Long> {
+public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findByWigellRepairsBookingCancelledTrue();
 

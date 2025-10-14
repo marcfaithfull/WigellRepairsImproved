@@ -3,8 +3,8 @@ package com.example.wigellrepairs.services;
 import com.example.wigellrepairs.dto.BookingDto;
 import com.example.wigellrepairs.entities.Booking;
 import com.example.wigellrepairs.entities.Service;
-import com.example.wigellrepairs.repositories.BookingsRepository;
-import com.example.wigellrepairs.repositories.ServicesRepository;
+import com.example.wigellrepairs.repositories.BookingRepository;
+import com.example.wigellrepairs.repositories.ServiceRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +19,14 @@ import java.util.Optional;
 
 @org.springframework.stereotype.Service
 public class BookingServiceImpl implements BookingService {
-    private final BookingsRepository BOOKING_REPOSITORY;
-    private final ServicesRepository SERVICE_REPOSITORY;
+    private final BookingRepository BOOKING_REPOSITORY;
+    private final ServiceRepository SERVICE_REPOSITORY;
     private final Logger CUSTOMER_SERVICE_LOGGER = LogManager.getLogger(BookingServiceImpl.class);
 
     @Autowired
-    public BookingServiceImpl(BookingsRepository bookingsRepository, ServicesRepository servicesRepository) {
-        this.BOOKING_REPOSITORY = bookingsRepository;
-        this.SERVICE_REPOSITORY = servicesRepository;
+    public BookingServiceImpl(BookingRepository bookingRepository, ServiceRepository serviceRepository) {
+        this.BOOKING_REPOSITORY = bookingRepository;
+        this.SERVICE_REPOSITORY = serviceRepository;
     }
 
     @Override

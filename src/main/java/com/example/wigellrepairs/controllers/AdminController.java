@@ -18,7 +18,7 @@ import java.util.List;
 public class AdminController {
     private final BookingServiceImpl BOOKING_SERVICE;
     private final ServicesServiceImpl SERVICE_SERVICE;
-    private final TechnicianService TECHNICIAN_SERVICE;
+    private final TechnicianServiceImpl TECHNICIAN_SERVICE;
 
     @Autowired
     public AdminController(BookingServiceImpl bookingService, ServicesServiceImpl serviceService, TechnicianServiceImpl technicianService) {

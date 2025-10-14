@@ -3,8 +3,8 @@ package com.example.wigellrepairs.services;
 import com.example.wigellrepairs.dto.ServiceDto;
 import com.example.wigellrepairs.entities.Booking;
 import com.example.wigellrepairs.entities.Technician;
-import com.example.wigellrepairs.repositories.BookingsRepository;
-import com.example.wigellrepairs.repositories.ServicesRepository;
+import com.example.wigellrepairs.repositories.BookingRepository;
+import com.example.wigellrepairs.repositories.ServiceRepository;
 import com.example.wigellrepairs.repositories.TechnicianRepository;
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
@@ -20,15 +20,15 @@ import java.util.List;
 
 @Service
 public class ServicesServiceImpl implements ServicesService {
-    private final BookingsRepository BOOKING_REPOSITORY;
-    private final ServicesRepository SERVICES_REPOSITORY;
+    private final BookingRepository BOOKING_REPOSITORY;
+    private final ServiceRepository SERVICES_REPOSITORY;
     private final TechnicianRepository TECHNICIAN_REPOSITORY;
     private final Logger SERVICE_LOGGER = LogManager.getLogger(ServicesServiceImpl.class);
 
     @Autowired
-    public ServicesServiceImpl(BookingsRepository bookingsRepository, ServicesRepository servicesRepository, TechnicianRepository technicianRepository) {
-        this.BOOKING_REPOSITORY = bookingsRepository;
-        this.SERVICES_REPOSITORY = servicesRepository;
+    public ServicesServiceImpl(BookingRepository bookingRepository, ServiceRepository serviceRepository, TechnicianRepository technicianRepository) {
+        this.BOOKING_REPOSITORY = bookingRepository;
+        this.SERVICES_REPOSITORY = serviceRepository;
         this.TECHNICIAN_REPOSITORY = technicianRepository;
     }
 

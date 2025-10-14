@@ -4,7 +4,7 @@ import com.example.wigellrepairs.dto.TechnicianDto;
 import com.example.wigellrepairs.entities.Booking;
 import com.example.wigellrepairs.entities.Service;
 import com.example.wigellrepairs.entities.Technician;
-import com.example.wigellrepairs.services.AdminServiceImpl;
+import com.example.wigellrepairs.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -16,56 +16,67 @@ import java.util.List;
 @RequestMapping("/api/wigellrepairs")
 @Secured("ROLE_ADMIN")
 public class AdminController {
-    private final AdminServiceImpl adminService;
+    private final BookingServiceImpl BOOKING_SERVICE;
+    private final ServicesServiceImpl SERVICE_SERVICE;
+    private final TechnicianService TECHNICIAN_SERVICE;
 
     @Autowired
-    public AdminController(AdminServiceImpl adminService) {
-        this.adminService = adminService;
+    public AdminController(BookingServiceImpl bookingService, ServicesServiceImpl serviceService, TechnicianServiceImpl technicianService) {
+        this.BOOKING_SERVICE = bookingService;
+        this.SERVICE_SERVICE = serviceService;
+        this.TECHNICIAN_SERVICE = technicianService;
     }
 
+
+
+    // Bookings
+
     @GetMapping("/listcancelled")
-    @ResponseBody
     public ResponseEntity<List<Booking>> listCancelledBookings() {
-        return ResponseEntity.ok(adminService.listCancelled());
+        return ResponseEntity.ok(BOOKING_SERVICE.listCancelled());
     }
 
     @GetMapping("/listupcoming")
-    @ResponseBody
     public ResponseEntity<List<Booking>> listUpcomingBookings() {
-        return ResponseEntity.ok(adminService.listUpcoming());
+        return ResponseEntity.ok(BOOKING_SERVICE.listUpcoming());
     }
 
     @GetMapping("/listpast")
-    @ResponseBody
     public ResponseEntity<List<Booking>> listPastBookings() {
-        return ResponseEntity.ok(adminService.listPast());
+        return ResponseEntity.ok(BOOKING_SERVICE.listPast());
     }
+
+
+
+    // Service
 
     @PostMapping("/addservice")
     public ResponseEntity<String> addService(@RequestBody Service service) {
-        return adminService.addService(service);
+        return SERVICE_SERVICE.addService(service);
     }
 
     @PutMapping("/updateservice")
     public ResponseEntity<String> updateService(@RequestBody Service service) {
-        return adminService.updateService(service);
+        return SERVICE_SERVICE.updateService(service);
     }
 
     @DeleteMapping("/remservice/{id}")
-    @ResponseBody
     public ResponseEntity<String> remService(@PathVariable Long id) {
-        return adminService.remService(id);
+        return SERVICE_SERVICE.remService(id);
 
     }
+
+
+
+    // Technician
 
     @PostMapping("/addtechnician")
     public ResponseEntity<String> addTechnician(@RequestBody Technician technician) {
-        return adminService.addTechnician(technician);
+        return TECHNICIAN_SERVICE.addTechnician(technician);
     }
 
     @GetMapping("/technicians")
-    @ResponseBody
     public ResponseEntity<List<TechnicianDto>> technicians() {
-        return ResponseEntity.ok(adminService.technicians());
+        return ResponseEntity.ok(TECHNICIAN_SERVICE.technicians());
     }
 }

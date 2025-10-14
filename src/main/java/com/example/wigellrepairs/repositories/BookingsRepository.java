@@ -1,14 +1,15 @@
 package com.example.wigellrepairs.repositories;
 
 import com.example.wigellrepairs.entities.Booking;
-import com.example.wigellrepairs.entities.Service;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 
 @Repository
 public interface BookingsRepository extends JpaRepository<Booking, Long> {
 
-    Booking findServiceByWigellRepairsServiceId(Long id);
+    List<Booking> findByWigellRepairsBookingCancelledTrue();
 
 }

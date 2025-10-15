@@ -1,4 +1,4 @@
-package com.example.wigellrepairs.controller;
+package com.example.wigellrepairs.controllers;
 
 
 import com.example.wigellrepairs.dto.TechnicianDto;
@@ -16,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder.*;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;

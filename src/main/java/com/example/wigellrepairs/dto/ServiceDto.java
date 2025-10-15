@@ -29,6 +29,14 @@ public class ServiceDto {
                 .collect(Collectors.toList());
     }
 
+    public ServiceDto() {
+    }
+
+    public ServiceDto(Long serviceId, String serviceName) {
+        this.serviceId = serviceId;
+        this.serviceName = serviceName;
+    }
+
     // EURO CONVERTER
     private static double convertToEuros(int sek) {
         return sek * 0.091;

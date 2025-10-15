@@ -4,7 +4,7 @@ import com.example.wigellrepairs.dto.TechnicianDto;
 import com.example.wigellrepairs.entities.Technician;
 import com.example.wigellrepairs.exceptions.ValidationException;
 import com.example.wigellrepairs.repositories.TechnicianRepository;
-import com.example.wigellrepairs.services.validators.TechnicianValidator;
+import com.example.wigellrepairs.services.validators.technicianservice.AddTechnicianValidator;
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,18 +17,18 @@ import java.util.List;
 @Transactional
 public class TechnicianServiceImpl implements TechnicianService {
     private final TechnicianRepository technicianRepository;
-    private final TechnicianValidator technicianValidator;
+    private final AddTechnicianValidator addTechnicianValidator;
     private final Logger TECHNICIAN_LOGGER = LogManager.getLogger(TechnicianServiceImpl.class);
 
     @Autowired
-    public TechnicianServiceImpl(TechnicianRepository technicianRepository, TechnicianValidator technicianValidator) {
+    public TechnicianServiceImpl(TechnicianRepository technicianRepository, AddTechnicianValidator addTechnicianValidator) {
         this.technicianRepository = technicianRepository;
-        this.technicianValidator = technicianValidator;
+        this.addTechnicianValidator = addTechnicianValidator;
     }
 
     @Override
     public void addTechnician(Technician technician) throws ValidationException {
-        technicianValidator.validateExpertise(technician.getWigellRepairsAreaOfExpertise());
+        addTechnicianValidator.validateExpertise(technician.getWigellRepairsAreaOfExpertise());
         technicianRepository.save(technician);
         TECHNICIAN_LOGGER.info("Technician '{}' with expertise '{}' was added to the database",
                 technician.getWigellRepairsTechnicianName(),

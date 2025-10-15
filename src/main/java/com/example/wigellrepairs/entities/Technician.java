@@ -22,7 +22,7 @@ public class Technician {
 
     @OneToMany(mappedBy = "wigellRepairsServiceTechnician", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<Service> services;
+    private List<ServiceEntity> services;
 
     public Technician() {
     }
@@ -59,11 +59,11 @@ public class Technician {
         this.wigellRepairsAreaOfExpertise = wigellRepairsAreaOfExpertise;
     }
 
-    public List<Service> getServices() {
+    public List<ServiceEntity> getServices() {
         return services;
     }
 
-    public void setServices(List<Service> services) {
+    public void setServices(List<ServiceEntity> services) {
         this.services = services;
     }
 }

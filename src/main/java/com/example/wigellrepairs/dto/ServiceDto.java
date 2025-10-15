@@ -1,6 +1,6 @@
 package com.example.wigellrepairs.dto;
 
-import com.example.wigellrepairs.entities.Service;
+import com.example.wigellrepairs.entities.ServiceEntity;
 
 import java.util.List;
 import java.util.Objects;
@@ -13,7 +13,7 @@ public class ServiceDto {
     private int priceInSEK;
     private double priceInEURO;
 
-    public static ServiceDto serviceDto(Service service) {
+    public static ServiceDto serviceDto(ServiceEntity service) {
         ServiceDto serviceDto = new ServiceDto();
         serviceDto.setServiceId(service.getWigellRepairsServiceId());
         serviceDto.setServiceName(service.getWigellRepairsServiceName());
@@ -23,7 +23,7 @@ public class ServiceDto {
         return serviceDto;
     }
 
-    public static List<ServiceDto> serviceDtoList(List<Service> services) {
+    public static List<ServiceDto> serviceDtoList(List<ServiceEntity> services) {
         return services.stream()
                 .map(ServiceDto::serviceDto)
                 .collect(Collectors.toList());

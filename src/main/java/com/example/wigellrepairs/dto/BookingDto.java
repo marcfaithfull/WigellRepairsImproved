@@ -1,7 +1,7 @@
 package com.example.wigellrepairs.dto;
 
 import com.example.wigellrepairs.entities.Booking;
-import com.example.wigellrepairs.entities.Service;
+import com.example.wigellrepairs.entities.ServiceEntity;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,7 +18,7 @@ public class BookingDto {
         BookingDto bookingDto = new BookingDto();
         bookingDto.setBookingId(booking.getWigellRepairsBookingId());
         bookingDto.setCustomer(booking.getWigellRepairsBookingCustomer());
-        Service service = booking.getWigellRepairsBookingService();
+        ServiceEntity service = booking.getWigellRepairsBookingService();
         bookingDto.setService(ServiceDto.serviceDto(service));
         bookingDto.setDateOfService(booking.getWigellRepairsBookingDate());
         return bookingDto;

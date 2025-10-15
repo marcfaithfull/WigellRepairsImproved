@@ -1,4 +1,4 @@
-package com.example.wigellrepairs.controllers;
+package com.example.wigellrepairs.controller;
 
 
 import com.example.wigellrepairs.dto.TechnicianDto;

@@ -1,14 +1,12 @@
-package com.example.wigellrepairs.services.validators;
+package com.example.wigellrepairs.services.validators.technicianservice;
 
 import com.example.wigellrepairs.exceptions.ValidationException;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 
 @Service
-public class TechnicianValidator {
+public class AddTechnicianValidator {
 
     public void validateExpertise(String expertise) throws ValidationException {
         String[] validExpertises = {"Car", "White goods", "Electronics"};

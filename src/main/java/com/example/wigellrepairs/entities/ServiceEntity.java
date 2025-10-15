@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "wigellrepairs_services")
-public class Service {
+public class ServiceEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

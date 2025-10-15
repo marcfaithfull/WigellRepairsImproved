@@ -3,6 +3,7 @@ package com.example.wigellrepairs.entities;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,6 +24,15 @@ public class Technician {
     @JsonManagedReference
     private List<Service> services;
 
+    public Technician() {
+    }
+
+    public Technician(String wigellRepairsTechnicianName, String wigellRepairsAreaOfExpertise) {
+        this.wigellRepairsTechnicianName = wigellRepairsTechnicianName;
+        this.wigellRepairsAreaOfExpertise = wigellRepairsAreaOfExpertise;
+        this.services= new ArrayList<>();
+
+    }
 
     // Getters and Setters
     public Long getWigellRepairsTechnicianId() {

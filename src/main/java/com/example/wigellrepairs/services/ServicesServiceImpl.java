@@ -20,27 +20,27 @@ import java.util.List;
 
 @Service
 public class ServicesServiceImpl implements ServicesService {
-    private final BookingRepository BOOKING_REPOSITORY;
-    private final ServiceRepository SERVICES_REPOSITORY;
-    private final TechnicianRepository TECHNICIAN_REPOSITORY;
+    private final BookingRepository bookingRepository;
+    private final ServiceRepository serviceRepository;
+    private final TechnicianRepository technicianRepository;
     private final Logger SERVICE_LOGGER = LogManager.getLogger(ServicesServiceImpl.class);
 
     @Autowired
     public ServicesServiceImpl(BookingRepository bookingRepository, ServiceRepository serviceRepository, TechnicianRepository technicianRepository) {
-        this.BOOKING_REPOSITORY = bookingRepository;
-        this.SERVICES_REPOSITORY = serviceRepository;
-        this.TECHNICIAN_REPOSITORY = technicianRepository;
+        this.bookingRepository = bookingRepository;
+        this.serviceRepository = serviceRepository;
+        this.technicianRepository = technicianRepository;
     }
 
     @Override
     public List<ServiceDto> services() {
-        return ServiceDto.serviceDtoList(SERVICES_REPOSITORY.findAll());
+        return ServiceDto.serviceDtoList(serviceRepository.findAll());
     }
 
     @Transactional
     @Override
     public ResponseEntity<String> addService(com.example.wigellrepairs.entities.Service service) {
-        if (!TECHNICIAN_REPOSITORY.existsById(service.getWigellRepairsServiceTechnician().getWigellRepairsTechnicianId())) {
+        if (!technicianRepository.existsById(service.getWigellRepairsServiceTechnician().getWigellRepairsTechnicianId())) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Choose a technician from the database");
         }
         if (!service.getWigellRepairsServiceType().equals("Car") &&
@@ -53,27 +53,27 @@ public class ServicesServiceImpl implements ServicesService {
         serviceToSave.setWigellRepairsServiceName(service.getWigellRepairsServiceName());
         serviceToSave.setWigellRepairsServiceType(service.getWigellRepairsServiceType());
         serviceToSave.setWigellRepairsServicePrice(service.getWigellRepairsServicePrice());
-        Technician technician = TECHNICIAN_REPOSITORY.findTechnicianByWigellRepairsTechnicianId(
+        Technician technician = technicianRepository.findTechnicianByWigellRepairsTechnicianId(
                 service.getWigellRepairsServiceTechnician().getWigellRepairsTechnicianId());
         if (!technician.getWigellRepairsAreaOfExpertise().equals(service.getWigellRepairsServiceType())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Choose a technician with the correct area of expertise");
         }
         serviceToSave.setWigellRepairsServiceTechnician(technician);
-        SERVICES_REPOSITORY.save(serviceToSave);
+        serviceRepository.save(serviceToSave);
         SERVICE_LOGGER.info("Service: '{}' was added to the database", serviceToSave.getWigellRepairsServiceName());
         return ResponseEntity.status(HttpStatus.OK).body("The service was added successfully");
     }
 
     @Override
     public ResponseEntity<String> updateService(com.example.wigellrepairs.entities.Service service) {
-        if (!SERVICES_REPOSITORY.existsById(service.getWigellRepairsServiceId())) {
+        if (!serviceRepository.existsById(service.getWigellRepairsServiceId())) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There is no service with this id in the database");
         }
-        com.example.wigellrepairs.entities.Service serviceToUpdate = SERVICES_REPOSITORY.findServiceByWigellRepairsServiceId(service.getWigellRepairsServiceId());
-        if (!TECHNICIAN_REPOSITORY.existsById(service.getWigellRepairsServiceTechnician().getWigellRepairsTechnicianId())) {
+        com.example.wigellrepairs.entities.Service serviceToUpdate = serviceRepository.findServiceByWigellRepairsServiceId(service.getWigellRepairsServiceId());
+        if (!technicianRepository.existsById(service.getWigellRepairsServiceTechnician().getWigellRepairsTechnicianId())) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There is no technician with this id in the database");
         }
-        Technician technicianToUpdate = TECHNICIAN_REPOSITORY.findTechnicianByWigellRepairsTechnicianId(service.getWigellRepairsServiceTechnician().getWigellRepairsTechnicianId());
+        Technician technicianToUpdate = technicianRepository.findTechnicianByWigellRepairsTechnicianId(service.getWigellRepairsServiceTechnician().getWigellRepairsTechnicianId());
         if (!technicianToUpdate.getWigellRepairsAreaOfExpertise().equals(serviceToUpdate.getWigellRepairsServiceType())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Choose a technician with the correct area of expertise");
         }
@@ -81,18 +81,18 @@ public class ServicesServiceImpl implements ServicesService {
         serviceToUpdate.setWigellRepairsServicePrice(service.getWigellRepairsServicePrice());
         serviceToUpdate.setWigellRepairsServiceTechnician(technicianToUpdate);
         SERVICE_LOGGER.info("Service with id '{}' was updated", service.getWigellRepairsServiceId());
-        SERVICES_REPOSITORY.save(serviceToUpdate);
+        serviceRepository.save(serviceToUpdate);
         return ResponseEntity.status(HttpStatus.OK).body("This service has been updated");
     }
 
     @Transactional
     @Override
     public ResponseEntity<String> remService(Long id) {
-        com.example.wigellrepairs.entities.Service serviceToRemove = SERVICES_REPOSITORY.findServiceByWigellRepairsServiceId(id);
-        if (!SERVICES_REPOSITORY.existsById(id)) {
+        com.example.wigellrepairs.entities.Service serviceToRemove = serviceRepository.findServiceByWigellRepairsServiceId(id);
+        if (!serviceRepository.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There is no service with this id in the database");
         }
-        List<Booking> bookings = BOOKING_REPOSITORY.findAll();
+        List<Booking> bookings = bookingRepository.findAll();
         List<Booking> bookingsWithMatchingService = new ArrayList<>();
         for (Booking booking : bookings) {
             if (booking.getWigellRepairsBookingService().getWigellRepairsServiceId().equals(serviceToRemove.getWigellRepairsServiceId()) &&
@@ -104,7 +104,7 @@ public class ServicesServiceImpl implements ServicesService {
         if (!bookingsWithMatchingService.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You cannot remove this service because it has been booked by one or more users");
         }
-        SERVICES_REPOSITORY.deleteServiceByWigellRepairsServiceId(serviceToRemove.getWigellRepairsServiceId());
+        serviceRepository.deleteServiceByWigellRepairsServiceId(serviceToRemove.getWigellRepairsServiceId());
         SERVICE_LOGGER.info("Service: '{}' was removed from the database", serviceToRemove.getWigellRepairsServiceId());
         return ResponseEntity.status(HttpStatus.OK).body("The service has been removed");
     }

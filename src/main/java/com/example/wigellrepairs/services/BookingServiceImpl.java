@@ -19,33 +19,33 @@ import java.util.Optional;
 
 @org.springframework.stereotype.Service
 public class BookingServiceImpl implements BookingService {
-    private final BookingRepository BOOKING_REPOSITORY;
-    private final ServiceRepository SERVICE_REPOSITORY;
+    private final BookingRepository bookingRepository;
+    private final ServiceRepository serviceRepository;
     private final Logger CUSTOMER_SERVICE_LOGGER = LogManager.getLogger(BookingServiceImpl.class);
 
     @Autowired
     public BookingServiceImpl(BookingRepository bookingRepository, ServiceRepository serviceRepository) {
-        this.BOOKING_REPOSITORY = bookingRepository;
-        this.SERVICE_REPOSITORY = serviceRepository;
+        this.bookingRepository = bookingRepository;
+        this.serviceRepository = serviceRepository;
     }
 
     @Override
     public ResponseEntity<String> bookService(Booking booking, Principal principal) {
-        Service serviceToBook = SERVICE_REPOSITORY.findServiceByWigellRepairsServiceId(booking.getWigellRepairsBookingService().getWigellRepairsServiceId());
+        Service serviceToBook = serviceRepository.findServiceByWigellRepairsServiceId(booking.getWigellRepairsBookingService().getWigellRepairsServiceId());
         if (serviceToBook == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There is no service with this id");
         }
         if (booking.getWigellRepairsBookingDate().isBefore(LocalDate.now())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You cannot book using a past date");
         }
-        List<Booking> bookings = BOOKING_REPOSITORY.findAll();
+        List<Booking> bookings = bookingRepository.findAll();
         for (Booking bookingInList : bookings) {
             if (bookingInList.getWigellRepairsBookingDate().equals(booking.getWigellRepairsBookingDate())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This date is not available. Try another date");
             }
         }
         booking.setWigellRepairsBookingCustomer(principal.getName());
-        BOOKING_REPOSITORY.save(booking);
+        bookingRepository.save(booking);
         CUSTOMER_SERVICE_LOGGER.info("{} booked service with id:{}",
                 booking.getWigellRepairsBookingCustomer(), booking.getWigellRepairsBookingService().getWigellRepairsServiceId());
         return ResponseEntity.status(HttpStatus.CREATED).body("The service has been booked");
@@ -53,7 +53,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public ResponseEntity<String> cancelBooking(Booking booking, Principal principal) {
-        Optional<Booking> optionalBooking = BOOKING_REPOSITORY.findById(booking.getWigellRepairsBookingId());
+        Optional<Booking> optionalBooking = bookingRepository.findById(booking.getWigellRepairsBookingId());
         if (optionalBooking.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There is no booking with this id");
         }
@@ -68,13 +68,13 @@ public class BookingServiceImpl implements BookingService {
             return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body("wigellRepairsBookingCancelled must be set to 'true' to cancel a booking");
         }
         bookingToCancel.setWigellRepairsBookingCancelled(true);
-        BOOKING_REPOSITORY.save(bookingToCancel);
+        bookingRepository.save(bookingToCancel);
         return ResponseEntity.status(HttpStatus.OK).body("Your booking has been cancelled");
     }
 
     @Override
     public List<BookingDto> myBookings(Principal principal) {
-        List<Booking> allBookings = BOOKING_REPOSITORY.findAll();
+        List<Booking> allBookings = bookingRepository.findAll();
         List<Booking> myBookings = new ArrayList<>();
         for (Booking booking : allBookings) {
             if (booking.getWigellRepairsBookingCustomer().equals(principal.getName()) && (booking.getWigellRepairsBookingCancelled().equals(false))) {
@@ -86,12 +86,12 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<Booking> listCancelled() {
-        return BOOKING_REPOSITORY.findByWigellRepairsBookingCancelledTrue();
+        return bookingRepository.findByWigellRepairsBookingCancelledTrue();
     }
 
     @Override
     public List<Booking> listUpcoming() {
-        List<Booking> allBookings = BOOKING_REPOSITORY.findAll();
+        List<Booking> allBookings = bookingRepository.findAll();
         List<Booking> upcomingBookings = new ArrayList<>();
         for (Booking booking : allBookings) {
             if (booking.getWigellRepairsBookingDate().isAfter(LocalDate.now()) && (!booking.getWigellRepairsBookingCancelled())) {
@@ -103,7 +103,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<Booking> listPast() {
-        List<Booking> allBookings = BOOKING_REPOSITORY.findAll();
+        List<Booking> allBookings = bookingRepository.findAll();
         List<Booking> pastBookings = new ArrayList<>();
         for (Booking booking : allBookings) {
             if (booking.getWigellRepairsBookingDate().isBefore(LocalDate.now())) {

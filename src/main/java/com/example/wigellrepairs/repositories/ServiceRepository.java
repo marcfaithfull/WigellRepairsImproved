@@ -1,15 +1,15 @@
 package com.example.wigellrepairs.repositories;
 
-import com.example.wigellrepairs.entities.Service;
+import com.example.wigellrepairs.entities.ServiceEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface ServiceRepository extends JpaRepository<Service, Long> {
+public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
 
-    void deleteServiceByWigellRepairsServiceId(@NonNull Long id);
+    void deleteServiceByWigellRepairsServiceId(Long id);
 
-    Service findServiceByWigellRepairsServiceId(Long id);
+    ServiceEntity findServiceByWigellRepairsServiceId(Long id);
 }

@@ -11,9 +11,9 @@ public interface BookingService {
 
     // User
 
-    ResponseEntity<String> bookService(Booking booking, Principal principal);
+    void bookService(Booking booking, Principal principal);
 
-    ResponseEntity<String> cancelBooking(Booking booking, Principal principal);
+    void cancelBooking(Booking booking, Principal principal);
 
     List<BookingDto> myBookings(Principal principal);
 

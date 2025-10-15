@@ -10,7 +10,7 @@ public interface TechnicianService {
 
     // Admin
 
-    ResponseEntity<String> addTechnician(Technician technician);
+    void addTechnician(Technician technician);
 
-    List<TechnicianDto> technicians();
+    List<TechnicianDto> getTechnicians();
 }

@@ -20,7 +20,7 @@ public class Booking {
     @ManyToOne
     @JoinColumn(name = "wigell_repairs_service_id", nullable = false)
     @JsonBackReference
-    private Service wigellRepairsBookingService;
+    private ServiceEntity wigellRepairsBookingService;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(nullable = false)
@@ -59,11 +59,11 @@ public class Booking {
         this.wigellRepairsBookingDate = wigellRepairsBookingDate;
     }
 
-    public Service getWigellRepairsBookingService() {
+    public ServiceEntity getWigellRepairsBookingService() {
         return wigellRepairsBookingService;
     }
 
-    public void setWigellRepairsBookingService(Service wigellRepairsBookingService) {
+    public void setWigellRepairsBookingService(ServiceEntity wigellRepairsBookingService) {
         this.wigellRepairsBookingService = wigellRepairsBookingService;
     }
 

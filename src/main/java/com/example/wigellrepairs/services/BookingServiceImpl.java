@@ -1,6 +1,7 @@
 package com.example.wigellrepairs.services;
 
 import com.example.wigellrepairs.dto.BookingDto;
+import com.example.wigellrepairs.dto.BookingRequestDto;
 import com.example.wigellrepairs.entities.Booking;
 import com.example.wigellrepairs.entities.ServiceEntity;
 import com.example.wigellrepairs.exceptions.*;
@@ -30,25 +31,28 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public void bookService(Booking booking, Principal principal) throws ServiceNotFoundException, DateException {
-        ServiceEntity serviceToBook = serviceRepository.findServiceByWigellRepairsServiceId(
-                booking.getWigellRepairsBookingService().getWigellRepairsServiceId());
+    public void bookService(BookingRequestDto bookingRequestDto, Principal principal) throws ServiceNotFoundException, DateException {
+        ServiceEntity serviceToBook = serviceRepository.findServiceByWigellRepairsServiceId(bookingRequestDto.getServiceId());
 
         if (serviceToBook == null) {
             throw new ServiceNotFoundException();
         }
 
-        if (booking.getWigellRepairsBookingDate().isBefore(LocalDate.now())) {
+        LocalDate requestedDate = bookingRequestDto.getDateOfService();
+        if (requestedDate.isBefore(LocalDate.now())) {
             throw new DateException("You cannot booking using a past date");
         }
 
-        List<Booking> bookings = bookingRepository.findAll();
-        for (Booking bookingInList : bookings) {
-            if (bookingInList.getWigellRepairsBookingDate().equals(booking.getWigellRepairsBookingDate())) {
+        List<Booking> existingBookings = bookingRepository.findAll();
+        for (Booking bookingInList : existingBookings) {
+            if (bookingInList.getWigellRepairsBookingDate().equals(requestedDate)) {
             throw new DateException("This date is not available. Try another date");}
         }
 
+        Booking booking = new Booking();
         booking.setWigellRepairsBookingCustomer(principal.getName());
+        booking.setWigellRepairsBookingDate(requestedDate);
+        booking.setWigellRepairsBookingService(serviceToBook);
         bookingRepository.save(booking);
         CUSTOMER_SERVICE_LOGGER.info("{} booked service with id:{}",
                 booking.getWigellRepairsBookingCustomer(), booking.getWigellRepairsBookingService().getWigellRepairsServiceId());

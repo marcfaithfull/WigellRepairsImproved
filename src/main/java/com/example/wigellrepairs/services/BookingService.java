@@ -1,6 +1,7 @@
 package com.example.wigellrepairs.services;
 
 import com.example.wigellrepairs.dto.BookingDto;
+import com.example.wigellrepairs.dto.BookingRequestDto;
 import com.example.wigellrepairs.entities.Booking;
 import org.springframework.http.ResponseEntity;
 
@@ -11,7 +12,7 @@ public interface BookingService {
 
     // User
 
-    void bookService(Booking booking, Principal principal);
+    void bookService(BookingRequestDto bookingRequestDto, Principal principal);
 
     void cancelBooking(Booking booking, Principal principal);
 

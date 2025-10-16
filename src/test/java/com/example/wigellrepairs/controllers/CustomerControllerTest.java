@@ -113,4 +113,43 @@ class CustomerControllerTest {
 
         assertEquals(1, bookingRepository.findAll().size());
     }
+
+    @Test
+    @WithMockUser(username = "Courtney", roles = "ADMIN")
+    void ShouldReturnCreated_WhenServiceBookedWithIncorrectUser() throws Exception {
+        BookingRequestDto bookingRequestDto = new BookingRequestDto();
+        bookingRequestDto.setCustomer("Kurt");
+        bookingRequestDto.setDateOfService(LocalDate.now().plusDays(10));
+        bookingRequestDto.setServiceId(savedService.getWigellRepairsServiceId());
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        String jsonResponse = mapper.writeValueAsString(bookingRequestDto);
+
+        mockMvc.perform(post("/api/wigellrepairs/bookservice")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonResponse))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "Kurt", roles = "USER")
+    void ShouldReturnBadRequest_WhenBookingWithAServiceThatDoesNotExist() throws Exception {
+        BookingRequestDto bookingRequestDto = new BookingRequestDto();
+        bookingRequestDto.setCustomer("Kurt");
+        bookingRequestDto.setDateOfService(LocalDate.now().plusDays(10));
+        bookingRequestDto.setServiceId(999L);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        String jsonResponse = mapper.writeValueAsString(bookingRequestDto);
+
+        mockMvc.perform(post("/api/wigellrepairs/bookservice")
+        .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonResponse))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("There is no service with this id in the database"));
+    }
 }

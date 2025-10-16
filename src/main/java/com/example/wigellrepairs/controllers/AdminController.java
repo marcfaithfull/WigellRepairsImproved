@@ -29,6 +29,7 @@ public class AdminController {
         this.technicianService = technicianService;
     }
 
+
     // Booking
 
     @GetMapping("/listcancelled")
@@ -46,6 +47,7 @@ public class AdminController {
         return ResponseEntity.ok(bookingService.listPast());
     }
 
+
     // Service
 
     @PostMapping("/addservice")
@@ -56,7 +58,7 @@ public class AdminController {
                     .body("Service added successfully");
         } catch (TechnicianNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (InvalidExpertiseException e) {
+        } catch (InvalidServiceTypeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -92,6 +94,7 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
 
     // Technician
 

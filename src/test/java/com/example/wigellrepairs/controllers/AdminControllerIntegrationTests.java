@@ -1,6 +1,5 @@
 package com.example.wigellrepairs.controllers;
 
-
 import com.example.wigellrepairs.dto.TechnicianDto;
 import com.example.wigellrepairs.entities.Technician;
 import com.example.wigellrepairs.repositories.TechnicianRepository;
@@ -22,11 +21,9 @@ import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 @SpringBootTest
 @AutoConfigureMockMvc
-class AdminControllerTest {
-
+class AdminControllerIntegrationTests {
 
     @Autowired
     private MockMvc mockMvc;
@@ -39,15 +36,14 @@ class AdminControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/wigellrepairs/technicians"))
                 .andExpect(status().is(401));
-
     }
+
     @WithMockUser(username = "Courtney", password = "Love", roles = "ADMIN")
     @Test
     void canGetTechnicians() throws Exception {
         // Arrange
         Technician tech = new Technician("aName","anExpertise");
         techRepo.save(tech);
-
 
         var response = mockMvc.perform(MockMvcRequestBuilders.get("/api/wigellrepairs/technicians"))
                 .andExpect(status().isOk()).andReturn();
@@ -59,11 +55,7 @@ class AdminControllerTest {
 
         var persistedTechnicianInList = technicians.stream().filter(dto -> dto.getAreaOfExpertise().equals(tech.getWigellRepairsAreaOfExpertise()) && dto.getName().equals(tech.getWigellRepairsTechnicianName())).toList();
 
-        Assertions.assertFalse(technicians.isEmpty());;//we received a list
-
-        Assertions.assertEquals(1, persistedTechnicianInList.size()); //the persisted technician is in listResponse. // Maybe we can test AddTechnician, and later use a test that addstechnician via controller and later checks calling technicians from the endpoint
-
+        Assertions.assertFalse(technicians.isEmpty());
+        Assertions.assertEquals(1, persistedTechnicianInList.size());
     }
-
-
 }

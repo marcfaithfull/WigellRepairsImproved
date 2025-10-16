@@ -4,10 +4,7 @@ import com.example.wigellrepairs.dto.BookingDto;
 import com.example.wigellrepairs.dto.BookingRequestDto;
 import com.example.wigellrepairs.dto.ServiceDto;
 import com.example.wigellrepairs.entities.Booking;
-import com.example.wigellrepairs.exceptions.BookingException;
-import com.example.wigellrepairs.exceptions.BookingNotFoundException;
-import com.example.wigellrepairs.exceptions.ServiceNotFoundException;
-import com.example.wigellrepairs.exceptions.UnauthorisedUserException;
+import com.example.wigellrepairs.exceptions.*;
 import com.example.wigellrepairs.services.BookingService;
 import com.example.wigellrepairs.services.ServiceEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +29,8 @@ public class CustomerController {
         this.serviceEntityService = serviceEntityService;
     }
 
-    // Services
+
+    // Service
 
     @GetMapping("/services")
     public ResponseEntity<List<ServiceDto>> services() {
@@ -40,17 +38,16 @@ public class CustomerController {
         return ResponseEntity.ok(services);
     }
 
-    // Bookings
+
+    // Booking
 
     @PostMapping("/bookservice")
     public ResponseEntity<String> bookAService(@RequestBody BookingRequestDto bookingRequestDto, Principal principal) {
         try {
             bookingService.bookService(bookingRequestDto, principal);
             return ResponseEntity.status(HttpStatus.CREATED).body("The service was successfully booked");
-        } catch (ServiceNotFoundException | BookingException e) {
+        } catch (ServiceNotFoundException | DateException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (UnauthorisedUserException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

@@ -1,5 +1,6 @@
 package com.example.wigellrepairs.controllers;
 
+import com.example.wigellrepairs.dto.BookingRequestDto;
 import com.example.wigellrepairs.dto.ServiceDto;
 import com.example.wigellrepairs.entities.Booking;
 import com.example.wigellrepairs.entities.ServiceEntity;
@@ -10,7 +11,6 @@ import com.example.wigellrepairs.repositories.TechnicianRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.apache.catalina.core.ApplicationContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,31 +18,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.mock.http.server.reactive.MockServerHttpRequest;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Principal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import static javax.security.auth.callback.ConfirmationCallback.OK;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class CustomerControllerTest {
 
     @Autowired
@@ -57,27 +48,35 @@ class CustomerControllerTest {
     @Autowired
     private BookingRepository bookingRepository;
 
-    @AfterEach
+    private Technician savedTech;
+    private ServiceEntity savedService;
+
+    /*@AfterEach
     void tearDown() {
         bookingRepository.deleteAll();
         serviceRepository.deleteAll();
         technicianRepository.deleteAll();
+    }*/
+
+    @BeforeEach
+    void setUp() {
+        bookingRepository.deleteAll();
+        serviceRepository.deleteAll();
+        technicianRepository.deleteAll();
+
+        savedTech = technicianRepository.save(new Technician("John", "Electronics"));
+
+        savedService = new ServiceEntity();
+        savedService.setWigellRepairsServiceName("Phone Repair");
+        savedService.setWigellRepairsServiceType("Electronics");
+        savedService.setWigellRepairsServicePrice(1000);
+        savedService.setWigellRepairsServiceTechnician(savedTech);
+        serviceRepository.save(savedService);
     }
 
     @Test()
     @WithMockUser(username = "Kurt", roles = "USER")
     void ShouldReturnListOfServices_WhilstUsingAuthorisedUser() throws Exception {
-        Technician tech = new Technician("Josh", "Electronics");
-        technicianRepository.save(tech);
-
-        ServiceEntity service = new ServiceEntity();
-        service.setWigellRepairsServiceName("Phone Repair");
-        service.setWigellRepairsServiceType("Electronics");
-        service.setWigellRepairsServicePrice(1000);
-        service.setWigellRepairsServiceTechnician(tech);
-        serviceRepository.save(service);
-
-
         var response = mockMvc.perform(MockMvcRequestBuilders.get("/api/wigellrepairs/services"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -94,46 +93,24 @@ class CustomerControllerTest {
     @Test
     @WithMockUser(username = "Kurt", roles = "USER")
     void ShouldReturnCreated_WhenServiceBookedWithCorrectUser() throws Exception {
-        Principal principal = mock(Principal.class);
-        when(principal.getName()).thenReturn("Kurt");
+        assertNotNull(savedService, "Service should not be null");
 
-        SecurityContextHolder.getContext().setAuthentication(
-                new UsernamePasswordAuthenticationToken(principal, "Cobain"));
-
-        Technician tech = new Technician("Josh", "Electronics");
-        technicianRepository.save(tech);
-
-        ServiceEntity service = new ServiceEntity();
-        service.setWigellRepairsServiceName("Phone Repair");
-        service.setWigellRepairsServiceType("Electronics");
-        service.setWigellRepairsServicePrice(1000);
-        service.setWigellRepairsServiceTechnician(tech);
-        serviceRepository.save(service);
-
-        Booking booking = new Booking();
-        booking.setWigellRepairsBookingCustomer("Kurt");
-        booking.setWigellRepairsBookingDate(LocalDate.now().minusDays(10));
-        booking.setWigellRepairsBookingService(service);
+        BookingRequestDto bookingRequestDto = new BookingRequestDto();
+        bookingRequestDto.setCustomer("Kurt");
+        bookingRequestDto.setDateOfService(LocalDate.now().plusDays(10));
+        bookingRequestDto.setServiceId(savedService.getWigellRepairsServiceId());
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
-        String jsonResponse = mapper.writeValueAsString(booking);
+        String jsonResponse = mapper.writeValueAsString(bookingRequestDto);
 
         mockMvc.perform(post("/api/wigellrepairs/bookservice")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(jsonResponse)
-                )
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonResponse))
+                .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.service.name").value("Phone Repair"));
+                .andExpect(content().string("The service was successfully booked"));
 
         assertEquals(1, bookingRepository.findAll().size());
-    }
-
-    @Test
-    void cancelBooking() {
-    }
-
-    @Test
-    void myBookings() {
     }
 }

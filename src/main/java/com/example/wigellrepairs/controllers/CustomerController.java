@@ -1,6 +1,7 @@
 package com.example.wigellrepairs.controllers;
 
 import com.example.wigellrepairs.dto.BookingDto;
+import com.example.wigellrepairs.dto.BookingRequestDto;
 import com.example.wigellrepairs.dto.ServiceDto;
 import com.example.wigellrepairs.entities.Booking;
 import com.example.wigellrepairs.exceptions.BookingException;
@@ -41,15 +42,16 @@ public class CustomerController {
     // Bookings
 
     @PostMapping("/bookservice")
-    public ResponseEntity<String> bookAService(@RequestBody Booking booking, Principal principal) {
+    public ResponseEntity<String> bookAService(@RequestBody BookingRequestDto bookingRequestDto, Principal principal) {
         try {
-            bookingService.bookService(booking, principal);
+            bookingService.bookService(bookingRequestDto, principal);
             return ResponseEntity.status(HttpStatus.CREATED).body("The service was successfully booked");
         } catch (BookingNotFoundException | BookingException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (UnauthorisedUserException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }

@@ -30,8 +30,6 @@ public class Technician {
     public Technician(String wigellRepairsTechnicianName, String wigellRepairsAreaOfExpertise) {
         this.wigellRepairsTechnicianName = wigellRepairsTechnicianName;
         this.wigellRepairsAreaOfExpertise = wigellRepairsAreaOfExpertise;
-        this.services= new ArrayList<>();
-
     }
 
     // Getters and Setters

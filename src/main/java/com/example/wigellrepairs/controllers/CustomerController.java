@@ -22,19 +22,19 @@ import java.util.List;
 @Secured("ROLE_USER")
 public class CustomerController {
     private final BookingService bookingService;
-    private final ServiceEntityService serviceService;
+    private final ServiceEntityService serviceEntityService;
 
     @Autowired
-    public CustomerController(BookingService bookingService, ServiceEntityService serviceService) {
+    public CustomerController(BookingService bookingService, ServiceEntityService serviceEntityService) {
         this.bookingService = bookingService;
-        this.serviceService = serviceService;
+        this.serviceEntityService = serviceEntityService;
     }
 
     // Services
 
     @GetMapping("/services")
     public ResponseEntity<List<ServiceDto>> services() {
-        List<ServiceDto> services = serviceService.getServices();
+        List<ServiceDto> services = serviceEntityService.getServices();
         return ResponseEntity.ok(services);
     }
 

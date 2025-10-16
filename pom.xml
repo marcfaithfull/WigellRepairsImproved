@@ -66,6 +66,10 @@
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
 <!--        (spring-cloud-starter-gateway-server-webmvc)-->
     </dependencies>
 

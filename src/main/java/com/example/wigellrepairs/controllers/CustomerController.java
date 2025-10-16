@@ -6,6 +6,7 @@ import com.example.wigellrepairs.dto.ServiceDto;
 import com.example.wigellrepairs.entities.Booking;
 import com.example.wigellrepairs.exceptions.BookingException;
 import com.example.wigellrepairs.exceptions.BookingNotFoundException;
+import com.example.wigellrepairs.exceptions.ServiceNotFoundException;
 import com.example.wigellrepairs.exceptions.UnauthorisedUserException;
 import com.example.wigellrepairs.services.BookingService;
 import com.example.wigellrepairs.services.ServiceEntityService;
@@ -46,7 +47,7 @@ public class CustomerController {
         try {
             bookingService.bookService(bookingRequestDto, principal);
             return ResponseEntity.status(HttpStatus.CREATED).body("The service was successfully booked");
-        } catch (BookingNotFoundException | BookingException e) {
+        } catch (ServiceNotFoundException | BookingException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (UnauthorisedUserException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());

@@ -11,7 +11,6 @@ import com.example.wigellrepairs.repositories.TechnicianRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +27,14 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-class CustomerControllerTest {
+class CustomerControllerIntegrationTests {
 
     @Autowired
     private MockMvc mockMvc;
@@ -50,13 +50,6 @@ class CustomerControllerTest {
 
     private Technician savedTech;
     private ServiceEntity savedService;
-
-    /*@AfterEach
-    void tearDown() {
-        bookingRepository.deleteAll();
-        serviceRepository.deleteAll();
-        technicianRepository.deleteAll();
-    }*/
 
     @BeforeEach
     void setUp() {
@@ -116,9 +109,9 @@ class CustomerControllerTest {
 
     @Test
     @WithMockUser(username = "Courtney", roles = "ADMIN")
-    void ShouldReturnCreated_WhenServiceBookedWithIncorrectUser() throws Exception {
+    void ShouldReturnForbidden_WhenAdminTriesToMakeABooking() throws Exception {
         BookingRequestDto bookingRequestDto = new BookingRequestDto();
-        bookingRequestDto.setCustomer("Kurt");
+        bookingRequestDto.setCustomer("Courtney");
         bookingRequestDto.setDateOfService(LocalDate.now().plusDays(10));
         bookingRequestDto.setServiceId(savedService.getWigellRepairsServiceId());
 
@@ -151,5 +144,90 @@ class CustomerControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("There is no service with this id in the database"));
+    }
+
+    @Test
+    @WithMockUser(username = "Kurt", roles = "USER")
+    void ShouldReturnBadRequest_WhenBookingDateIsInThePast() throws Exception {
+        BookingRequestDto bookingRequestDto = new BookingRequestDto();
+        bookingRequestDto.setCustomer("Kurt");
+        bookingRequestDto.setDateOfService(LocalDate.now().minusDays(10));
+        bookingRequestDto.setServiceId(savedService.getWigellRepairsServiceId());
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        String jsonResponse = mapper.writeValueAsString(bookingRequestDto);
+
+        mockMvc.perform(post("/api/wigellrepairs/bookservice")
+        .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonResponse))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("You cannot book using a past date"));
+    }
+
+    @Test
+    @WithMockUser(username = "Kurt", roles = "USER")
+    void ShouldReturnBadRequest_WhenDateIsUnavailable() throws Exception {
+        Booking oldBooking = new Booking();
+        oldBooking.setWigellRepairsBookingService(savedService);
+        oldBooking.setWigellRepairsBookingDate(LocalDate.now().plusDays(10));
+        bookingRepository.save(oldBooking);
+
+        BookingRequestDto newBooking = new BookingRequestDto();
+        newBooking.setCustomer("Kurt");
+        newBooking.setDateOfService(LocalDate.now().plusDays(10));
+        newBooking.setServiceId(savedService.getWigellRepairsServiceId());
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        String jsonResponse = mapper.writeValueAsString(newBooking);
+
+        mockMvc.perform(post("/api/wigellrepairs/bookservice")
+        .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonResponse))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("This date is not available. Try another date"));
+    }
+
+    @Test
+    @WithMockUser(username = "Kurt", roles = "USER")
+    void ShouldReturn500_SomethingUnexpectedHappens_DateRequestWasRemoved() throws Exception {
+        BookingRequestDto bookingRequestDto = new BookingRequestDto();
+        bookingRequestDto.setCustomer("Kurt");
+        bookingRequestDto.setServiceId(savedService.getWigellRepairsServiceId());
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        String jsonResponse = mapper.writeValueAsString(bookingRequestDto);
+
+        mockMvc.perform(post("/api/wigellrepairs/bookservice")
+        .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonResponse))
+                .andDo(print())
+                .andExpect(status().isInternalServerError());
+    }
+
+    @Test
+    @WithMockUser(username = "Kurt", roles = "USER")
+    void ShouldReturn200_WhenBookingIsCancelled() throws Exception {
+        Booking currentBooking = new Booking();
+        currentBooking.setWigellRepairsBookingCustomer("Kurt");
+        currentBooking.setWigellRepairsBookingDate(LocalDate.now().plusDays(10));
+        currentBooking.setWigellRepairsBookingService(savedService);
+        currentBooking.setWigellRepairsBookingCancelled(false);
+        bookingRepository.save(currentBooking);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        String jsonResponse = mapper.writeValueAsString(currentBooking);
+
+        mockMvc.perform(put("/api/wigellrepairs/cancelbooking")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonResponse))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string("Booking has been cancelled"));
     }
 }

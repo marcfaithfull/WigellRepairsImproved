@@ -40,13 +40,14 @@ public class BookingServiceImpl implements BookingService {
 
         LocalDate requestedDate = bookingRequestDto.getDateOfService();
         if (requestedDate.isBefore(LocalDate.now())) {
-            throw new DateException("You cannot booking using a past date");
+            throw new DateException("You cannot book using a past date");
         }
 
         List<Booking> existingBookings = bookingRepository.findAll();
         for (Booking bookingInList : existingBookings) {
             if (bookingInList.getWigellRepairsBookingDate().equals(requestedDate)) {
-            throw new DateException("This date is not available. Try another date");}
+            throw new DateException("This date is not available. Try another date");
+            }
         }
 
         Booking booking = new Booking();

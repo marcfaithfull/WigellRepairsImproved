@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class ServiceServiceTest {
+class ServiceEntityServiceUnitTests {
 
     @Mock
     private ServiceRepository serviceRepository;
@@ -53,5 +53,4 @@ class ServiceServiceTest {
         assertEquals(expected, actual);
         verify(serviceRepository, times(1)).findAll();
     }
-
 }

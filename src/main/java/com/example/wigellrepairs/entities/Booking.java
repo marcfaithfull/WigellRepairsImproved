@@ -12,9 +12,10 @@ public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "wigell_repairs_booking_id")
     private Long wigellRepairsBookingId;
 
-    @Column
+    @Column(name = "wigell_repairs_booking_customer")
     private String wigellRepairsBookingCustomer;
 
     @ManyToOne
@@ -22,11 +23,11 @@ public class Booking {
     @JsonBackReference
     private ServiceEntity wigellRepairsBookingService;
 
+    @Column(name = "wigell_repairs_booking_date", nullable = false)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    @Column(nullable = false)
     private LocalDate wigellRepairsBookingDate;
 
-    @Column(nullable = false)
+    @Column(name = "wigell_repairs_booking_cancelled", nullable = false)
     private Boolean wigellRepairsBookingCancelled;
 
     // Constructor

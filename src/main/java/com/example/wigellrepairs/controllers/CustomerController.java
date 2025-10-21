@@ -3,11 +3,15 @@ package com.example.wigellrepairs.controllers;
 import com.example.wigellrepairs.dto.BookingDto;
 import com.example.wigellrepairs.dto.BookingRequestDto;
 import com.example.wigellrepairs.dto.ServiceDto;
+import com.example.wigellrepairs.dto.ServiceDtoFactory;
 import com.example.wigellrepairs.entities.Booking;
+import com.example.wigellrepairs.entities.ServiceEntity;
 import com.example.wigellrepairs.exceptions.*;
 import com.example.wigellrepairs.services.BookingService;
 import com.example.wigellrepairs.services.ServiceEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -24,22 +28,31 @@ public class CustomerController {
     private final BookingService bookingService;
     private final ServiceEntityService serviceEntityService;
     private RestClient restClient;
+    private ServiceDtoFactory serviceDtoFactory;
 
     @Autowired
     public CustomerController(BookingService bookingService, ServiceEntityService serviceEntityService,
-                              RestClient.Builder restClientBuilder) {
+                              RestClient restClient, ServiceDtoFactory serviceDtoFactory) {
         this.bookingService = bookingService;
         this.serviceEntityService = serviceEntityService;
-        this.restClient = restClientBuilder.build();
+        this.restClient = restClient;
+        this.serviceDtoFactory = serviceDtoFactory;
     }
 
+    @GetMapping("/call-b")
+    public String callMicroserviceB() {
+        return restClient.get()
+                .uri("/convert/sekToEuro")
+                .retrieve()
+                .body(String.class);
+    }
 
     // Service
 
     @GetMapping("/services")
     public ResponseEntity<List<ServiceDto>> services() {
-        List<ServiceDto> services = serviceEntityService.getServices();
-        return ResponseEntity.ok(services);
+        List<ServiceEntity> services = serviceEntityService.getServices();
+        return ResponseEntity.ok(serviceDtoFactory.fromEntityList(services));
     }
 
 

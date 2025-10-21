@@ -1,6 +1,7 @@
 package com.example.wigellrepairs.services;
 
 import com.example.wigellrepairs.dto.BookingDto;
+import com.example.wigellrepairs.dto.BookingDtoFactory;
 import com.example.wigellrepairs.dto.BookingRequestDto;
 import com.example.wigellrepairs.entities.Booking;
 import com.example.wigellrepairs.entities.ServiceEntity;
@@ -23,11 +24,14 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final ServiceRepository serviceRepository;
     private final Logger CUSTOMER_SERVICE_LOGGER = LogManager.getLogger(BookingServiceImpl.class);
+    private final BookingDtoFactory bookingDtoFactory;
 
     @Autowired
-    public BookingServiceImpl(BookingRepository bookingRepository, ServiceRepository serviceRepository) {
+    public BookingServiceImpl(BookingRepository bookingRepository, ServiceRepository serviceRepository,
+                              BookingDtoFactory bookingDtoFactory) {
         this.bookingRepository = bookingRepository;
         this.serviceRepository = serviceRepository;
+        this.bookingDtoFactory = bookingDtoFactory;
     }
 
     @Override
@@ -93,7 +97,7 @@ public class BookingServiceImpl implements BookingService {
                 myBookings.add(booking);
             }
         }
-        return BookingDto.bookingDtoList(myBookings);
+        return bookingDtoFactory.fromEntityList(myBookings);
     }
 
     @Override

@@ -59,7 +59,7 @@ class BookingServiceUnitTests {
 
         when(bookingRepository.findAll()).thenReturn(allBookings);
 
-        List<BookingDto> expected = BookingDto.bookingDtoList(allBookings);
+        List<Booking> expected = allBookings;
         List<BookingDto> actual = bookingService.myBookings(principal);
 
         assertEquals(expected, actual);

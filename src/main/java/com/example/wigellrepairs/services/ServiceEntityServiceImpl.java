@@ -39,8 +39,8 @@ public class ServiceEntityServiceImpl implements ServiceEntityService {
     }
 
     @Override
-    public List<ServiceDto> getServices() {
-        return ServiceDto.serviceDtoList(serviceRepository.findAll());
+    public List<ServiceEntity> getServices() {
+        return serviceRepository.findAll();
     }
 
     @Override

@@ -14,21 +14,6 @@ public class BookingDto {
     private ServiceDto serviceDto;
     private LocalDate dateOfService;
 
-    public static BookingDto bookingDto(Booking booking) {
-        BookingDto bookingDto = new BookingDto();
-        bookingDto.setBookingId(booking.getWigellRepairsBookingId());
-        bookingDto.setCustomer(booking.getWigellRepairsBookingCustomer());
-        ServiceEntity service = booking.getWigellRepairsBookingService();
-        bookingDto.setService(ServiceDto.serviceDto(service));
-        bookingDto.setDateOfService(booking.getWigellRepairsBookingDate());
-        return bookingDto;
-    }
-
-    public static List<BookingDto> bookingDtoList(List<Booking> bookings) {
-        return bookings.stream()
-                .map(BookingDto::bookingDto)
-                .collect(Collectors.toList());
-    }
 
     // Getters and Setters
     public Long getBookingId() {

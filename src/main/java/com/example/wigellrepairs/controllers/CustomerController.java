@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestClient;
 
 import java.security.Principal;
 import java.util.List;
@@ -22,11 +23,14 @@ import java.util.List;
 public class CustomerController {
     private final BookingService bookingService;
     private final ServiceEntityService serviceEntityService;
+    private RestClient restClient;
 
     @Autowired
-    public CustomerController(BookingService bookingService, ServiceEntityService serviceEntityService) {
+    public CustomerController(BookingService bookingService, ServiceEntityService serviceEntityService,
+                              RestClient.Builder restClientBuilder) {
         this.bookingService = bookingService;
         this.serviceEntityService = serviceEntityService;
+        this.restClient = restClientBuilder.build();
     }
 
 

@@ -13,12 +13,13 @@ public class ConvertSekToEuro {
     }
 
     public double convertSEKtoEUR(double amount) {
-        return restClient.get()
+         Double response = restClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/convert/sekToEuro")
                         .queryParam("amount", amount)
                         .build())
                 .retrieve()
                 .body(Double.class);
+        return response != null ? response : 0.0;
     }
 }

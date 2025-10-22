@@ -1,6 +1,5 @@
 package com.example.wigellrepairs.services;
 
-import com.example.wigellrepairs.dto.ServiceDto;
 import com.example.wigellrepairs.entities.ServiceEntity;
 import com.example.wigellrepairs.entities.Technician;
 import com.example.wigellrepairs.exceptions.*;

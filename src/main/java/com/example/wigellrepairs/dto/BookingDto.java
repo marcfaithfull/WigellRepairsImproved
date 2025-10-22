@@ -1,12 +1,7 @@
 package com.example.wigellrepairs.dto;
 
-import com.example.wigellrepairs.entities.Booking;
-import com.example.wigellrepairs.entities.ServiceEntity;
-
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class BookingDto {
     private Long bookingId;
@@ -15,7 +10,6 @@ public class BookingDto {
     private LocalDate dateOfService;
 
 
-    // Getters and Setters
     public Long getBookingId() {
         return bookingId;
     }
@@ -47,6 +41,7 @@ public class BookingDto {
     public void setDateOfService(LocalDate dateOfService) {
         this.dateOfService = dateOfService;
     }
+
 
     @Override
     public boolean equals(Object object) {

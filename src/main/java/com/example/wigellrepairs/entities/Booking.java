@@ -30,12 +30,12 @@ public class Booking {
     @Column(name = "wigell_repairs_booking_cancelled", nullable = false)
     private Boolean wigellRepairsBookingCancelled;
 
-    // Constructor
+
     public Booking() {
         this.wigellRepairsBookingCancelled = false;
     }
 
-    // Getters and Setters
+
     public Long getWigellRepairsBookingId() {
         return wigellRepairsBookingId;
     }

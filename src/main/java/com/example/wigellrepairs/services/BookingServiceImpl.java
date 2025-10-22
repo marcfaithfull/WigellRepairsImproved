@@ -64,7 +64,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public void cancelBooking(Booking booking, Principal principal) throws BookingException, BookingNotFoundException, UnauthorisedUserException {
+    public void cancelBooking(Booking booking, Principal principal) throws BadBookingException, BookingNotFoundException, UnauthorisedUserException {
         Optional<Booking> optionalBooking = bookingRepository.findById(booking.getWigellRepairsBookingId());
 
         if (optionalBooking.isEmpty()) {
@@ -78,7 +78,7 @@ public class BookingServiceImpl implements BookingService {
         }
 
         if (bookingToCancel.getWigellRepairsBookingDate().minusDays(1).isBefore(LocalDate.now())) {
-            throw new BookingException("It is too late to cancel this booking");
+            throw new BadBookingException("It is too late to cancel this booking");
         }
 
         bookingToCancel.setWigellRepairsBookingCancelled(true);
@@ -97,7 +97,7 @@ public class BookingServiceImpl implements BookingService {
                 myBookings.add(booking);
             }
         }
-        return bookingDtoFactory.fromEntityList(myBookings);
+        return bookingDtoFactory.bookingDtoList(myBookings);
     }
 
     @Override

@@ -10,13 +10,10 @@ import com.example.wigellrepairs.exceptions.*;
 import com.example.wigellrepairs.services.BookingService;
 import com.example.wigellrepairs.services.ServiceEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestClient;
 
 import java.security.Principal;
 import java.util.List;
@@ -27,32 +24,23 @@ import java.util.List;
 public class CustomerController {
     private final BookingService bookingService;
     private final ServiceEntityService serviceEntityService;
-    private RestClient restClient;
     private ServiceDtoFactory serviceDtoFactory;
 
     @Autowired
     public CustomerController(BookingService bookingService, ServiceEntityService serviceEntityService,
-                              RestClient restClient, ServiceDtoFactory serviceDtoFactory) {
+                              ServiceDtoFactory serviceDtoFactory) {
         this.bookingService = bookingService;
         this.serviceEntityService = serviceEntityService;
-        this.restClient = restClient;
         this.serviceDtoFactory = serviceDtoFactory;
     }
 
-    @GetMapping("/call-b")
-    public String callMicroserviceB() {
-        return restClient.get()
-                .uri("/convert/sekToEuro")
-                .retrieve()
-                .body(String.class);
-    }
 
     // Service
 
     @GetMapping("/services")
     public ResponseEntity<List<ServiceDto>> services() {
         List<ServiceEntity> services = serviceEntityService.getServices();
-        return ResponseEntity.ok(serviceDtoFactory.fromEntityList(services));
+        return ResponseEntity.ok(serviceDtoFactory.serviceDtoList(services));
     }
 
 
@@ -66,7 +54,6 @@ public class CustomerController {
         } catch (ServiceNotFoundException | DateException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
@@ -80,7 +67,7 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (UnauthorisedUserException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
-        } catch (BookingException e) {
+        } catch (BadBookingException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

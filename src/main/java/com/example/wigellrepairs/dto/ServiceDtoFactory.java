@@ -16,7 +16,7 @@ public class ServiceDtoFactory {
         this.convertSekToEuro = convertSekToEuro;
     }
 
-    public ServiceDto fromEntity(ServiceEntity entity) {
+    public ServiceDto serviceDto(ServiceEntity entity) {
         int priceSEK = entity.getWigellRepairsServicePrice();
         double priceEUR = convertSekToEuro.convertSEKtoEUR(priceSEK);
 
@@ -29,9 +29,9 @@ public class ServiceDtoFactory {
         return dto;
     }
 
-    public List<ServiceDto> fromEntityList(List<ServiceEntity> entities) {
+    public List<ServiceDto> serviceDtoList(List<ServiceEntity> entities) {
         return entities.stream()
-                .map(this::fromEntity)
+                .map(this::serviceDto)
                 .collect(Collectors.toList());
     }
 }

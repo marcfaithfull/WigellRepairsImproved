@@ -16,9 +16,9 @@ public class BookingDtoFactory {
         this.serviceDtoFactory = serviceDtoFactory;
     }
 
-    public BookingDto fromEntity(Booking booking) {
+    public BookingDto bookingDto(Booking booking) {
         ServiceEntity serviceEntity = booking.getWigellRepairsBookingService();
-        ServiceDto serviceDto = serviceDtoFactory.fromEntity(serviceEntity);
+        ServiceDto serviceDto = serviceDtoFactory.serviceDto(serviceEntity);
 
         BookingDto dto = new BookingDto();
         dto.setBookingId(booking.getWigellRepairsBookingId());
@@ -28,9 +28,9 @@ public class BookingDtoFactory {
         return dto;
     }
 
-    public List<BookingDto> fromEntityList(List<Booking> bookings) {
+    public List<BookingDto> bookingDtoList(List<Booking> bookings) {
         return bookings.stream()
-                .map(this::fromEntity)
+                .map(this::bookingDto)
                 .collect(Collectors.toList());
     }
 }

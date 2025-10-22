@@ -3,7 +3,6 @@ package com.example.wigellrepairs.entities;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,6 +23,7 @@ public class Technician {
     @JsonManagedReference
     private List<ServiceEntity> services;
 
+
     public Technician() {
     }
 
@@ -32,7 +32,7 @@ public class Technician {
         this.wigellRepairsAreaOfExpertise = wigellRepairsAreaOfExpertise;
     }
 
-    // Getters and Setters
+
     public Long getWigellRepairsTechnicianId() {
         return wigellRepairsTechnicianId;
     }

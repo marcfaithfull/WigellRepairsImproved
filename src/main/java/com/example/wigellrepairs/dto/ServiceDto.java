@@ -1,10 +1,6 @@
 package com.example.wigellrepairs.dto;
 
-import com.example.wigellrepairs.entities.ServiceEntity;
-
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class ServiceDto {
     private Long serviceId;
@@ -13,7 +9,7 @@ public class ServiceDto {
     private int priceInSEK;
     private double priceInEURO;
 
-    // Getters and Setters
+
     public Long getServiceId() {
         return serviceId;
     }

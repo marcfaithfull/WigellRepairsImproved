@@ -1,6 +1,9 @@
 package com.example.wigellrepairs.services;
 
 import com.example.wigellrepairs.dto.BookingDto;
+import com.example.wigellrepairs.dto.BookingDtoFactory;
+import com.example.wigellrepairs.dto.ServiceDto;
+import com.example.wigellrepairs.dto.ServiceDtoFactory;
 import com.example.wigellrepairs.entities.Booking;
 import com.example.wigellrepairs.entities.ServiceEntity;
 import com.example.wigellrepairs.repositories.BookingRepository;
@@ -9,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.security.Principal;
@@ -28,6 +32,12 @@ class BookingServiceUnitTests {
     @Mock
     private ServiceRepository serviceRepository;
 
+    @Mock
+    private BookingDtoFactory bookingDtoFactory;
+
+    @Mock
+    private ServiceDtoFactory serviceDtoFactory;
+
     @InjectMocks
     private BookingServiceImpl bookingService;
 
@@ -46,6 +56,7 @@ class BookingServiceUnitTests {
         ServiceEntity service1 = new ServiceEntity();
         booking1.setWigellRepairsBookingService(service1);
 
+
         Booking booking2 = new Booking();
         booking2.setWigellRepairsBookingId(2L);
         booking2.setWigellRepairsBookingDate(LocalDate.now().plusDays(1));
@@ -55,14 +66,25 @@ class BookingServiceUnitTests {
         ServiceEntity service2 = new ServiceEntity();
         booking2.setWigellRepairsBookingService(service2);
 
-        List<Booking> allBookings = Arrays.asList(booking1, booking2);
+        List<Booking> bookings = Arrays.asList(booking1, booking2);
 
-        when(bookingRepository.findAll()).thenReturn(allBookings);
+        BookingDto bookingDto1 = new BookingDto();
+        bookingDto1.setBookingId(1L);
+        bookingDto1.setDateOfService(booking1.getWigellRepairsBookingDate());
+        bookingDto1.setCustomer(principal.getName());
 
-        List<Booking> expected = allBookings;
-        List<BookingDto> actual = bookingService.myBookings(principal);
+        BookingDto bookingDto2 = new BookingDto();
+        bookingDto2.setBookingId(2L);
+        bookingDto2.setDateOfService(booking2.getWigellRepairsBookingDate());
+        bookingDto2.setCustomer(principal.getName());
 
-        assertEquals(expected, actual);
+        List<BookingDto> expected = List.of(bookingDto1, bookingDto2);
+
+        when(bookingDtoFactory.bookingDtoList(Mockito.anyList())).thenReturn(expected);
+
+        List<BookingDto> bookingDtos = bookingService.myBookings(principal);
+
+        assertEquals(expected, bookingDtos);
         verify(bookingRepository, times(1)).findAll();
     }
 }

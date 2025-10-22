@@ -32,11 +32,11 @@ public class ServiceEntity {
     @JsonIgnore
     private List<Booking> bookings;
 
+
     public ServiceEntity() {
     }
 
 
-    // Getters and Setters
     public Long getWigellRepairsServiceId() {
         return wigellRepairsServiceId;
     }

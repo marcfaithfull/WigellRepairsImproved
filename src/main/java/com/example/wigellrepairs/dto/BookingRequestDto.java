@@ -9,13 +9,13 @@ public class BookingRequestDto {
 
     public BookingRequestDto() {}
 
-    public BookingRequestDto(String customer, LocalDate dateOfService, Long serviceId) {
+   /* public BookingRequestDto(String customer, LocalDate dateOfService, Long serviceId) {
         this.customer = customer;
         this.dateOfService = dateOfService;
         this.serviceId = serviceId;
-    }
+    }*/
 
-    // Getters and Setters
+
     public String getCustomer() {
         return customer;
     }

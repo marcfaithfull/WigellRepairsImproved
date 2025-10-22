@@ -44,10 +44,10 @@ class ServiceEntityServiceUnitTests {
         when(serviceRepository.findAll()).thenReturn(servicesTestList);
 
         // Expected
-        List<ServiceDto> expected = ServiceDto.serviceDtoList(servicesTestList);
+        List<ServiceEntity> expected = servicesTestList;
 
         // Act
-        List<ServiceDto> actual = serviceService.getServices();
+        List<ServiceEntity> actual = serviceService.getServices();
 
         // Assert
         assertEquals(expected, actual);

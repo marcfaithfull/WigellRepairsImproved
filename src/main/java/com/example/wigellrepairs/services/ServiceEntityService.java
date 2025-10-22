@@ -11,7 +11,7 @@ public interface ServiceEntityService {
 
     // User
 
-    List<ServiceDto> getServices();
+    List<ServiceEntity> getServices();
 
 
     // Admin

@@ -1,6 +1,7 @@
 package com.example.wigellrepairs.services;
 
 import com.example.wigellrepairs.dto.TechnicianDto;
+import com.example.wigellrepairs.dto.TechnicianDtoFactory;
 import com.example.wigellrepairs.entities.Technician;
 import com.example.wigellrepairs.exceptions.ValidationException;
 import com.example.wigellrepairs.repositories.TechnicianRepository;
@@ -18,12 +19,15 @@ import java.util.List;
 public class TechnicianServiceImpl implements TechnicianService {
     private final TechnicianRepository technicianRepository;
     private final AddTechnicianValidator addTechnicianValidator;
+    private final TechnicianDtoFactory technicianDtoFactory;
     private final Logger TECHNICIAN_LOGGER = LogManager.getLogger(TechnicianServiceImpl.class);
 
     @Autowired
-    public TechnicianServiceImpl(TechnicianRepository technicianRepository, AddTechnicianValidator addTechnicianValidator) {
+    public TechnicianServiceImpl(TechnicianRepository technicianRepository, AddTechnicianValidator addTechnicianValidator,
+                                 TechnicianDtoFactory technicianDtoFactory) {
         this.technicianRepository = technicianRepository;
         this.addTechnicianValidator = addTechnicianValidator;
+        this.technicianDtoFactory = technicianDtoFactory;
     }
 
     @Override
@@ -36,6 +40,6 @@ public class TechnicianServiceImpl implements TechnicianService {
     }
 
     public List<TechnicianDto> getTechnicians() {
-        return TechnicianDto.technicianDtoList(technicianRepository.findAll());
+        return technicianDtoFactory.technicianDtoList(technicianRepository.findAll());
     }
 }

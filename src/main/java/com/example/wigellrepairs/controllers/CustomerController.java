@@ -3,7 +3,9 @@ package com.example.wigellrepairs.controllers;
 import com.example.wigellrepairs.dto.BookingDto;
 import com.example.wigellrepairs.dto.BookingRequestDto;
 import com.example.wigellrepairs.dto.ServiceDto;
+import com.example.wigellrepairs.dto.ServiceDtoFactory;
 import com.example.wigellrepairs.entities.Booking;
+import com.example.wigellrepairs.entities.ServiceEntity;
 import com.example.wigellrepairs.exceptions.*;
 import com.example.wigellrepairs.services.BookingService;
 import com.example.wigellrepairs.services.ServiceEntityService;
@@ -22,11 +24,14 @@ import java.util.List;
 public class CustomerController {
     private final BookingService bookingService;
     private final ServiceEntityService serviceEntityService;
+    private ServiceDtoFactory serviceDtoFactory;
 
     @Autowired
-    public CustomerController(BookingService bookingService, ServiceEntityService serviceEntityService) {
+    public CustomerController(BookingService bookingService, ServiceEntityService serviceEntityService,
+                              ServiceDtoFactory serviceDtoFactory) {
         this.bookingService = bookingService;
         this.serviceEntityService = serviceEntityService;
+        this.serviceDtoFactory = serviceDtoFactory;
     }
 
 
@@ -34,8 +39,8 @@ public class CustomerController {
 
     @GetMapping("/services")
     public ResponseEntity<List<ServiceDto>> services() {
-        List<ServiceDto> services = serviceEntityService.getServices();
-        return ResponseEntity.ok(services);
+        List<ServiceEntity> services = serviceEntityService.getServices();
+        return ResponseEntity.ok(serviceDtoFactory.serviceDtoList(services));
     }
 
 
@@ -49,7 +54,6 @@ public class CustomerController {
         } catch (ServiceNotFoundException | DateException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
@@ -63,7 +67,7 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (UnauthorisedUserException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
-        } catch (BookingException e) {
+        } catch (BadBookingException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

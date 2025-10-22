@@ -1,6 +1,5 @@
 package com.example.wigellrepairs.services;
 
-import com.example.wigellrepairs.dto.ServiceDto;
 import com.example.wigellrepairs.entities.ServiceEntity;
 import com.example.wigellrepairs.entities.Technician;
 import com.example.wigellrepairs.exceptions.*;
@@ -39,8 +38,8 @@ public class ServiceEntityServiceImpl implements ServiceEntityService {
     }
 
     @Override
-    public List<ServiceDto> getServices() {
-        return ServiceDto.serviceDtoList(serviceRepository.findAll());
+    public List<ServiceEntity> getServices() {
+        return serviceRepository.findAll();
     }
 
     @Override

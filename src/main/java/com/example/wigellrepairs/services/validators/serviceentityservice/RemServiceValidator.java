@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class RemServiceValidator {
@@ -38,7 +37,7 @@ public class RemServiceValidator {
                                 .equals(serviceToRemove.getWigellRepairsServiceId()) &&
                                 !booking.getWigellRepairsBookingCancelled() &&
                                 booking.getWigellRepairsBookingDate().isAfter(LocalDate.now()))
-                .collect(Collectors.toList());
+                .toList();
 
         if (!activeBookings.isEmpty()) {
             throw new ServiceHasActiveBookingsException(

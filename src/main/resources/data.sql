@@ -13,12 +13,12 @@ INSERT INTO wigellrepairs_services (wigell_repairs_service_name,
                                     wigell_repairs_service_price,
                                     wigell_repairs_technician_id)
 VALUES
-    ('Front road-side axle replacement','Car',2000,1),
-    ('Windscreen wiper replacement','Car',300,2),
-    ('Phone screen replacement','Electronic',500,3),
-    ('Laptop speaker replacement','Electronic',1000,4),
-    ('Washing machine drum replacement','White goods',500,5),
-    ('Fridge fan replacement','White goods',400,6);
+    ('Front road-side axle replacement','Car',5000,1),
+    ('Windscreen wiper replacement','Car',2500,2),
+    ('Phone screen replacement','Electronics',1500,3),
+    ('Laptop speaker replacement','Electronics',1200,4),
+    ('Washing machine drum replacement','White goods',1500,5),
+    ('Fridge fan replacement','White goods',1200,6);
 
 INSERT INTO wigellrepairs_bookings (wigell_repairs_booking_customer,
                                     wigell_repairs_service_id,

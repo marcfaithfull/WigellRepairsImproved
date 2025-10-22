@@ -1,10 +1,6 @@
 package com.example.wigellrepairs.dto;
 
-import com.example.wigellrepairs.entities.ServiceEntity;
-
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class ServiceDto {
     private Long serviceId;
@@ -13,36 +9,7 @@ public class ServiceDto {
     private int priceInSEK;
     private double priceInEURO;
 
-    public static ServiceDto serviceDto(ServiceEntity service) {
-        ServiceDto serviceDto = new ServiceDto();
-        serviceDto.setServiceId(service.getWigellRepairsServiceId());
-        serviceDto.setServiceName(service.getWigellRepairsServiceName());
-        serviceDto.setServiceType(service.getWigellRepairsServiceType());
-        serviceDto.setPriceInSEK(service.getWigellRepairsServicePrice());
-        serviceDto.setPriceInEURO(convertToEuros(service.getWigellRepairsServicePrice()));
-        return serviceDto;
-    }
 
-    public static List<ServiceDto> serviceDtoList(List<ServiceEntity> services) {
-        return services.stream()
-                .map(ServiceDto::serviceDto)
-                .collect(Collectors.toList());
-    }
-
-    public ServiceDto() {
-    }
-
-    public ServiceDto(Long serviceId, String serviceName) {
-        this.serviceId = serviceId;
-        this.serviceName = serviceName;
-    }
-
-    // EURO CONVERTER
-    private static double convertToEuros(int sek) {
-        return sek * 0.091;
-    }
-
-    // Getters and Setters
     public Long getServiceId() {
         return serviceId;
     }

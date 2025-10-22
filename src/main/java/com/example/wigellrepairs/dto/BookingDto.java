@@ -1,12 +1,7 @@
 package com.example.wigellrepairs.dto;
 
-import com.example.wigellrepairs.entities.Booking;
-import com.example.wigellrepairs.entities.ServiceEntity;
-
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class BookingDto {
     private Long bookingId;
@@ -14,23 +9,7 @@ public class BookingDto {
     private ServiceDto serviceDto;
     private LocalDate dateOfService;
 
-    public static BookingDto bookingDto(Booking booking) {
-        BookingDto bookingDto = new BookingDto();
-        bookingDto.setBookingId(booking.getWigellRepairsBookingId());
-        bookingDto.setCustomer(booking.getWigellRepairsBookingCustomer());
-        ServiceEntity service = booking.getWigellRepairsBookingService();
-        bookingDto.setService(ServiceDto.serviceDto(service));
-        bookingDto.setDateOfService(booking.getWigellRepairsBookingDate());
-        return bookingDto;
-    }
 
-    public static List<BookingDto> bookingDtoList(List<Booking> bookings) {
-        return bookings.stream()
-                .map(BookingDto::bookingDto)
-                .collect(Collectors.toList());
-    }
-
-    // Getters and Setters
     public Long getBookingId() {
         return bookingId;
     }
@@ -62,6 +41,7 @@ public class BookingDto {
     public void setDateOfService(LocalDate dateOfService) {
         this.dateOfService = dateOfService;
     }
+
 
     @Override
     public boolean equals(Object object) {

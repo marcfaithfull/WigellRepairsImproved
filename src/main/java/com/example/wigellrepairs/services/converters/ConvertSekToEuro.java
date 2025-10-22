@@ -9,17 +9,16 @@ public class ConvertSekToEuro {
     private final RestClient restClient;
 
     public ConvertSekToEuro(RestClient.Builder builder) {
-        this.restClient = builder.baseUrl("http://localhost:8081").build();
+        this.restClient = builder.baseUrl("http://wigellrepairscurrencyconverter:8081").build();
     }
 
     public double convertSEKtoEUR(double amount) {
-         Double response = restClient.get()
+        return restClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/convert/sekToEuro")
                         .queryParam("amount", amount)
                         .build())
                 .retrieve()
                 .body(Double.class);
-        return response != null ? response : 0.0;
     }
 }
